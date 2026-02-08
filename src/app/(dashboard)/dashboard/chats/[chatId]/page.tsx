@@ -114,21 +114,26 @@ export default function ChatDetailPage() {
             </span>
             {chat?.documentIds && chat.documentIds.length > 0 && (
               <span className="text-xs text-slate-400">
-                • {chat.documentIds.length} document{chat.documentIds.length > 1 ? 's' : ''}
+                • {chat.documentIds.length} document
+                {chat.documentIds.length > 1 ? "s" : ""}
               </span>
             )}
           </div>
           {chat?.documentIds && chat.documentIds.length > 0 && (
             <div className="mt-1">
               <p className="text-xs text-slate-600">
-                Documents: {/* Show document IDs since we don't have names in this response */}
-                {chat.documentIds.slice(0, 2).map((docId: string, i: number) => (
-                  <span key={docId}>
-                    {i > 0 && ", "}
-                    {docId.slice(-8)}
-                  </span>
-                ))}
-                {chat.documentIds.length > 2 && ` +${chat.documentIds.length - 2} more`}
+                Documents:{" "}
+                {/* Show document IDs since we don't have names in this response */}
+                {chat.documentIds
+                  .slice(0, 2)
+                  .map((docId: string, i: number) => (
+                    <span key={docId}>
+                      {i > 0 && ", "}
+                      {docId.slice(-8)}
+                    </span>
+                  ))}
+                {chat.documentIds.length > 2 &&
+                  ` +${chat.documentIds.length - 2} more`}
               </p>
             </div>
           )}
@@ -205,7 +210,11 @@ export default function ChatDetailPage() {
                                     {source.documentName}
                                   </span>
                                   <span className="text-xs text-slate-500">
-                                    {Math.round((source.score || source.similarity || 0) * 100)}% match
+                                    {Math.round(
+                                      (source.score || source.similarity || 0) *
+                                        100,
+                                    )}
+                                    % match
                                   </span>
                                 </div>
                                 <p className="text-xs text-slate-400 line-clamp-3">

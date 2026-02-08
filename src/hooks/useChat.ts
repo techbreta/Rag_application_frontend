@@ -44,7 +44,7 @@ export function useChatSessions(page = 1, limit = 10) {
       const { data } = await api.get(
         `/v1/rag/chats?page=${page}&limit=${limit}`,
       );
-      console.log('[API] GET /v1/rag/chats - Response:', data);
+      console.log("[API] GET /v1/rag/chats - Response:", data);
       return data.data;
     },
   });
@@ -67,9 +67,9 @@ export function useSendMessage() {
 
   return useMutation<ChatResponse, Error, SendMessagePayload>({
     mutationFn: async (payload) => {
-      console.log('[API] POST /v1/rag/chat - Payload:', payload);
+      console.log("[API] POST /v1/rag/chat - Payload:", payload);
       const { data } = await api.post("/v1/rag/chat", payload);
-      console.log('[API] POST /v1/rag/chat - Response:', data);
+      console.log("[API] POST /v1/rag/chat - Response:", data);
       return data.data;
     },
     onSuccess: () => {

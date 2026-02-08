@@ -164,7 +164,10 @@ export default function ChatPage() {
                     onClick={() => {
                       setChatMode(mode.value);
                       if (mode.value === "all-documents") setSelectedDocs([]);
-                      if (mode.value === "single-document" && selectedDocs.length > 1) {
+                      if (
+                        mode.value === "single-document" &&
+                        selectedDocs.length > 1
+                      ) {
                         setSelectedDocs([selectedDocs[0]]);
                       }
                     }}

@@ -153,7 +153,7 @@ export default function DocumentsPage() {
           </StaggerContainer>
 
           {/* Pagination */}
-          {data?.documents?.length >= 10 && (
+          {(data?.documents?.length ?? 0) >= 10 && (
             <div className="flex items-center justify-center gap-4 mt-8">
               <Button
                 variant="ghost"
@@ -163,13 +163,11 @@ export default function DocumentsPage() {
               >
                 <ChevronLeft className="h-4 w-4 mr-1" /> Previous
               </Button>
-              <span className="text-sm text-slate-400">
-                Page {page}
-              </span>
+              <span className="text-sm text-slate-400">Page {page}</span>
               <Button
                 variant="ghost"
                 size="sm"
-                disabled={data?.documents?.length < 10}
+                disabled={(data?.documents?.length ?? 0) < 10}
                 onClick={() => setPage((p) => p + 1)}
               >
                 Next <ChevronRight className="h-4 w-4 ml-1" />

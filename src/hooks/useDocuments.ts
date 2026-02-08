@@ -35,7 +35,7 @@ export function useDocuments(page = 1, limit = 10) {
       const { data } = await api.get(
         `/v1/rag/documents?page=${page}&limit=${limit}`,
       );
-      console.log('[API] GET /v1/rag/documents - Response:', data);
+      console.log("[API] GET /v1/rag/documents - Response:", data);
       return data.data;
     },
   });
@@ -46,7 +46,10 @@ export function useDocumentDetails(documentId: string) {
     queryKey: ["document", documentId],
     queryFn: async () => {
       const { data } = await api.get(`/v1/rag/documents/${documentId}`);
-      console.log(`[API] GET /v1/rag/documents/${documentId} - Response:`, data);
+      console.log(
+        `[API] GET /v1/rag/documents/${documentId} - Response:`,
+        data,
+      );
       return data.data;
     },
     enabled: !!documentId,
@@ -66,14 +69,14 @@ export function useUploadDocument() {
     }) => {
       // Upload to Cloudinary first
       const fileUrl = await uploadToCloudinary(file, onProgress);
-      console.log('[API] Cloudinary upload complete - fileUrl:', fileUrl);
+      console.log("[API] Cloudinary upload complete - fileUrl:", fileUrl);
 
       // Then send URL to backend
       const { data } = await api.post("/v1/rag/upload", {
         fileUrl,
         fileName: file.name,
       });
-      console.log('[API] POST /v1/rag/upload - Response:', data);
+      console.log("[API] POST /v1/rag/upload - Response:", data);
       return data;
     },
     onSuccess: () => {
@@ -92,7 +95,10 @@ export function useDeleteDocument() {
   return useMutation({
     mutationFn: async (documentId: string) => {
       const { data } = await api.delete(`/v1/rag/documents/${documentId}`);
-      console.log(`[API] DELETE /v1/rag/documents/${documentId} - Response:`, data);
+      console.log(
+        `[API] DELETE /v1/rag/documents/${documentId} - Response:`,
+        data,
+      );
       return data;
     },
     onSuccess: () => {

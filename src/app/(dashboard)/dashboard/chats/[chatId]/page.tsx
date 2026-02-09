@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams } from "next/navigation";
@@ -165,7 +166,14 @@ export default function ChatDetailPage() {
             ) : (
               <>
                 <div className="h-8 w-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0">
-                  <Sparkles className="h-4 w-4 text-white" />
+                  <Image
+                    src="/icon.png"
+                    alt="Sparkle"
+                    width={16}
+                    height={16}
+                                   className="text-violet-400 h-40 w-auto"
+
+                  />
                 </div>
                 <div className="max-w-2xl space-y-2">
                   <div className="rounded-2xl rounded-tl-none bg-gradient-to-r from-violet-600/10 to-indigo-600/10 border border-violet-500/20 px-4 py-3">

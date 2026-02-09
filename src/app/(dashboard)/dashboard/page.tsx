@@ -20,6 +20,7 @@ import {
   Clock,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -137,8 +138,14 @@ export default function DashboardPage() {
           <Card className="relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/20 to-transparent rounded-bl-full" />
             <div className="relative">
-              <div className="rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 p-3 w-fit mb-4">
-                <Sparkles className="h-6 w-6 text-white" />
+              <div className="rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 p-2  w-fit mb-4">
+                <Image
+                src="/icon.png"
+                alt="Sparkle"
+                width={400}
+                height={400}
+                className="text-violet-400 h-8 w-auto"
+               />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">
                 Start AI Chat

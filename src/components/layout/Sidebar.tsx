@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -10,7 +11,6 @@ import {
   MessageSquare,
   History,
   LogOut,
-  Sparkles,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -42,21 +42,17 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="flex h-16 items-center justify-between px-4 border-b border-slate-800">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 p-2 shrink-0">
-            <Sparkles className="h-5 w-5 text-white" />
-          </div>
-          <AnimatePresence>
-            {!collapsed && (
-              <motion.span
-                initial={{ opacity: 0, width: 0 }}
-                animate={{ opacity: 1, width: "auto" }}
-                exit={{ opacity: 0, width: 0 }}
-                className="text-xl font-bold text-white overflow-hidden whitespace-nowrap"
-              >
-                RAG<span className="text-violet-400">AI</span>
-              </motion.span>
+          <Image
+            src="/rag.png"
+            alt="RagAI Logo"
+            width={collapsed ? 40 : 120}
+            height={collapsed ? 40 : 48}
+            priority
+            className={cn(
+              "transition-all duration-300 object-contain",
+              collapsed ? "h-40 w-10" : "h-40 w-auto",
             )}
-          </AnimatePresence>
+          />
         </Link>
         <button
           onClick={() => setCollapsed(!collapsed)}

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
@@ -228,7 +229,14 @@ export default function HowItWorksPage() {
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="h-6 w-6 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
-                              <Sparkles className="h-3 w-3 text-emerald-400" />
+                              <Image
+                                src="/icon.png"
+                                alt="Sparkle"
+                                width={400}
+                                height={400}
+                                 className="text-violet-400 h-10 w-auto"
+
+                              />
                             </div>
                             <div className="flex gap-1">
                               <div className="h-2 w-2 rounded-full bg-slate-600 animate-bounce" />

@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import Button from "@/components/ui/Button";
-import { Sparkles, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 export default function Navbar() {
@@ -21,16 +22,17 @@ export default function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative">
-              <div className="absolute inset-0 rounded-lg bg-violet-500 blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
-              <div className="relative rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 p-2">
-                <Sparkles className="h-5 w-5 text-white" />
-              </div>
+          <Link href="/" className="flex items-center group">
+            <div className="relative transition-transform group-hover:scale-105">
+              <Image
+                src="/rag.png"
+                alt="RagAI Logo"
+                width={140}
+                height={140}
+                priority
+                className="h-40 mt-2 w-auto"
+              />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
-              RAG<span className="text-violet-400">AI</span>
-            </span>
           </Link>
 
           {/* Desktop Nav */}

@@ -8,7 +8,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import { Mail, Lock, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { Mail, Lock } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { GlowingOrb } from "@/components/layout/AnimatedPage";
@@ -64,9 +65,16 @@ export default function LoginPage() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring", bounce: 0.5 }}
-              className="inline-flex rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 p-3 mb-4"
+              className="inline-flex mb-4"
             >
-              <Sparkles className="h-8 w-8 text-white" />
+              <Image
+                src="/rag.png"
+                alt="RagAI Logo"
+                width={140}
+                height={56}
+                priority
+                className="h-40 w-auto"
+              />
             </motion.div>
             <h1 className="text-2xl font-bold text-white mb-2">Welcome Back</h1>
             <p className="text-sm text-slate-400">

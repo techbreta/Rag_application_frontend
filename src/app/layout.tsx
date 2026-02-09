@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: "RAGAI - Chat with Your Documents",
   description:
     "Upload your documents and chat with them using AI. Get instant, accurate answers grounded in your actual documents.",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({

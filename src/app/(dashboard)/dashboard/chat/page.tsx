@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSendMessage } from "@/hooks/useChat";
 import { useDocuments } from "@/hooks/useDocuments";
@@ -245,7 +246,14 @@ export default function ChatPage() {
               transition={{ type: "spring", bounce: 0.5 }}
               className="rounded-2xl bg-gradient-to-br from-violet-500/20 to-indigo-500/20 p-6 mb-6"
             >
-              <Sparkles className="h-12 w-12 text-violet-400" />
+              <Image
+                src="/icon.png"
+                alt="Sparkle"
+                width={400}
+                height={400}
+                                className="text-violet-400 h-20 w-20 "
+
+              />
             </motion.div>
             <h3 className="text-xl font-semibold text-white mb-2">
               Start a Conversation
@@ -281,7 +289,14 @@ export default function ChatPage() {
                 ) : (
                   <>
                     <div className="h-8 w-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0">
-                      <Sparkles className="h-4 w-4 text-white" />
+                      <Image
+                        src="/icon.png"
+                        alt="Sparkle"
+                        width={16}
+                        height={16}
+                                        className="text-violet-400 h-40 w-auto"
+
+                      />
                     </div>
                     <div className="max-w-2xl space-y-2">
                       <div className="rounded-2xl rounded-tl-none bg-gradient-to-r from-violet-600/10 to-indigo-600/10 border border-violet-500/20 px-4 py-3">

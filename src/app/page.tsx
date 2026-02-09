@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Button from "@/components/ui/Button";
@@ -106,12 +107,18 @@ export default function Home() {
         <div className="relative mx-auto max-w-6xl text-center">
           <FadeIn>
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.1 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
-              className="inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 mb-8"
+              className="inline-flex items-center  rounded-full border border-violet-500/30 bg-violet-500/10 px-4 mb-8"
             >
-              <Sparkles className="h-4 w-4 text-violet-400" />
+              <Image
+                src="/icon.png"
+                alt="Sparkle"
+                width={400}
+                height={400}
+                className="text-violet-400 h-10 w-10"
+              />
               <span className="text-sm text-violet-300">
                 Powered by Advanced AI
               </span>
@@ -184,7 +191,13 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="h-8 w-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0">
-                        <Sparkles className="h-4 w-4" />
+                        <Image
+                          src="/icon.png"
+                          className="text-violet-400 h-8 w-auto"
+                          alt="Sparkle"
+                          width={400}
+                          height={400}
+                        />
                       </div>
                     </div>
                   </div>
@@ -308,7 +321,13 @@ export default function Home() {
           <ScaleIn>
             <div className="rounded-3xl border border-slate-800 bg-gradient-to-br from-violet-500/10 to-indigo-500/10 p-12 text-center backdrop-blur-sm">
               <FloatingElement duration={4}>
-                <Sparkles className="h-12 w-12 text-violet-400 mx-auto mb-6" />
+                <Image
+                  src="/icon.png"
+                  alt="Sparkle"
+                  className="text-violet-400 h-20 w-auto"
+                  width={480}
+                  height={480}
+                />
               </FloatingElement>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 Ready to Get Started?
@@ -332,12 +351,13 @@ export default function Home() {
       <footer className="border-t border-slate-800 py-12 px-4">
         <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 p-1.5">
-              <Sparkles className="h-4 w-4 text-white" />
-            </div>
-            <span className="font-bold text-white">
-              RAG<span className="text-violet-400">AI</span>
-            </span>
+            <Image
+              src="/rag.png"
+              alt="RagAI Logo"
+              width={100}
+              height={40}
+              className="h-40 w-auto"
+            />
           </div>
           <p className="text-sm text-slate-500">
             © {new Date()?.getFullYear()} RAGAI. All rights reserved.

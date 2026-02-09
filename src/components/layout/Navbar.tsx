@@ -36,19 +36,19 @@ export default function Navbar() {
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-6">
             <Link
-              href="#features"
+              href="/features"
               className="text-sm text-slate-400 hover:text-white transition-colors"
             >
               Features
             </Link>
             <Link
-              href="#how-it-works"
+              href="/how-it-works"
               className="text-sm text-slate-400 hover:text-white transition-colors"
             >
               How it Works
             </Link>
             <Link
-              href="#pricing"
+              href="/pricing"
               className="text-sm text-slate-400 hover:text-white transition-colors"
             >
               Pricing
@@ -93,18 +93,25 @@ export default function Navbar() {
             className="md:hidden py-4 border-t border-slate-800 space-y-3"
           >
             <Link
-              href="#features"
+              href="/features"
               className="block text-sm text-slate-400 hover:text-white py-2"
               onClick={() => setMobileOpen(false)}
             >
               Features
             </Link>
             <Link
-              href="#how-it-works"
+              href="/how-it-works"
               className="block text-sm text-slate-400 hover:text-white py-2"
               onClick={() => setMobileOpen(false)}
             >
               How it Works
+            </Link>
+            <Link
+              href="/pricing"
+              className="block text-sm text-slate-400 hover:text-white py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              Pricing
             </Link>
             {isAuthenticated ? (
               <Link href="/dashboard" onClick={() => setMobileOpen(false)}>

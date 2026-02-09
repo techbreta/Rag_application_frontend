@@ -340,7 +340,7 @@ export default function Home() {
             </span>
           </div>
           <p className="text-sm text-slate-500">
-            © 2025 RAGAI. All rights reserved.
+            © {new Date()?.getFullYear()} RAGAI. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link

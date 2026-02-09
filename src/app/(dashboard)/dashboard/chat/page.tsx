@@ -324,15 +324,15 @@ export default function ChatPage() {
                                     <div className="flex items-center gap-2 mb-1">
                                       <FileText className="h-3 w-3 text-violet-400" />
                                       <span className="text-xs font-medium text-violet-300">
-                                        {source.documentName}
+                                        {source.documentName || source.documentId?.fileName || "Document"}
                                       </span>
                                       <span className="text-xs text-slate-500">
-                                        {Math.round(source.similarity * 100)}%
+                                        {Math.round((source.score ?? source.similarity ?? 0) * 100)}%
                                         match
                                       </span>
                                     </div>
                                     <p className="text-xs text-slate-400 line-clamp-3">
-                                      {source.relevantChunk}
+                                      {source.content || source.relevantChunk}
                                     </p>
                                   </div>
                                 ))}

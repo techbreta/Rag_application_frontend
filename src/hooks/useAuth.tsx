@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       const { data } = await api.get("/v1/users/me");
       console.log("[API] GET /v1/users/me - Response:", data);
-      setUser(data);
+      setUser(data.user);
     } catch {
       setUser(null);
       localStorage.removeItem("accessToken");

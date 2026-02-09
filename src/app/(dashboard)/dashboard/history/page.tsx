@@ -16,8 +16,6 @@ import { formatDate, truncate } from "@/lib/utils";
 import {
   MessageSquare,
   Trash2,
-  ChevronLeft,
-  ChevronRight,
   ArrowRight,
   Clock,
   FileText,
@@ -27,10 +25,9 @@ import {
 import Link from "next/link";
 
 export default function HistoryPage() {
-  const [page, setPage] = useState(1);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data, isLoading } = useChatSessions(page);
+  const { data, isLoading } = useChatSessions();
   const deleteMutation = useDeleteChat();
 
   const getChatTypeIcon = (type: string) => {
@@ -121,29 +118,6 @@ export default function HistoryPage() {
               </StaggerItem>
             ))}
           </StaggerContainer>
-
-          {/* Pagination */}
-          {data.chats?.length >= 10 && (
-            <div className="flex items-center justify-center gap-4 mt-8">
-              <Button
-                variant="ghost"
-                size="sm"
-                disabled={page === 1}
-                onClick={() => setPage((p) => p - 1)}
-              >
-                <ChevronLeft className="h-4 w-4 mr-1" /> Previous
-              </Button>
-              <span className="text-sm text-slate-400">Page {page}</span>
-              <Button
-                variant="ghost"
-                size="sm"
-                disabled={data.chats?.length < 10}
-                onClick={() => setPage((p) => p + 1)}
-              >
-                Next <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </div>
-          )}
         </>
       ) : (
         <EmptyState

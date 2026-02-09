@@ -64,7 +64,7 @@ export default function DashboardPage() {
         <motion.h1
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="text-3xl font-bold text-white"
+          className="text-2xl sm:text-3xl font-bold text-white"
         >
           Welcome back,{" "}
           <span className="bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
@@ -78,7 +78,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats Cards */}
-      <StaggerContainer className="grid gap-6 md:grid-cols-3 mb-8">
+      <StaggerContainer className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mb-8">
         {stats.map((stat, i) => (
           <StaggerItem key={i}>
             <Link href={stat.href}>
@@ -103,7 +103,7 @@ export default function DashboardPage() {
       </StaggerContainer>
 
       {/* Quick Actions */}
-      <div className="grid gap-6 md:grid-cols-2 mb-8">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 mb-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -140,12 +140,12 @@ export default function DashboardPage() {
             <div className="relative">
               <div className="rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 p-2  w-fit mb-4">
                 <Image
-                src="/icon.png"
-                alt="Sparkle"
-                width={400}
-                height={400}
-                className="text-violet-400 h-8 w-auto"
-               />
+                  src="/icon.png"
+                  alt="Sparkle"
+                  width={400}
+                  height={400}
+                  className="text-violet-400 h-8 w-auto"
+                />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">
                 Start AI Chat

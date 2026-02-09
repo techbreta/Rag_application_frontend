@@ -96,16 +96,16 @@ export default function ChatDetailPage() {
   if (isLoading) return <PageLoader />;
 
   return (
-    <AnimatedPage className="flex flex-col h-[calc(100vh-4rem)]">
+    <AnimatedPage className="flex flex-col h-[calc(100vh-7rem)] md:h-[calc(100vh-4rem)]">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-4">
+      <div className="flex items-start sm:items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
         <Link href="/dashboard/history">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="h-4 w-4 mr-1" /> Back
           </Button>
         </Link>
         <div className="flex-1">
-          <h1 className="text-lg font-bold text-white">
+          <h1 className="text-base sm:text-lg font-bold text-white truncate">
             {chat?.title || "Chat Session"}
           </h1>
           <div className="flex items-center gap-2 flex-wrap">
@@ -157,7 +157,7 @@ export default function ChatDetailPage() {
                 <div className="h-8 w-8 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shrink-0">
                   <span className="text-xs font-bold text-white">U</span>
                 </div>
-                <div className="rounded-2xl rounded-tl-none bg-slate-800 px-4 py-3 max-w-2xl">
+                <div className="rounded-2xl rounded-tl-none bg-slate-800 px-3 sm:px-4 py-2.5 sm:py-3 max-w-[85vw] sm:max-w-xl md:max-w-2xl">
                   <p className="text-sm text-slate-200 whitespace-pre-wrap">
                     {msg.content}
                   </p>
@@ -169,13 +169,12 @@ export default function ChatDetailPage() {
                   <Image
                     src="/icon.png"
                     alt="Sparkle"
-                    width={16}
-                    height={16}
-                                   className="text-violet-400 h-40 w-auto"
-
+                    width={400}
+                    height={400}
+                    className="text-violet-400 h-10 w-auto"
                   />
                 </div>
-                <div className="max-w-2xl space-y-2">
+                <div className="max-w-[85vw] sm:max-w-xl md:max-w-2xl space-y-2">
                   <div className="rounded-2xl rounded-tl-none bg-gradient-to-r from-violet-600/10 to-indigo-600/10 border border-violet-500/20 px-4 py-3">
                     <div className="text-sm text-slate-200 prose prose-invert prose-sm max-w-none">
                       <ReactMarkdown>{msg.content}</ReactMarkdown>
@@ -256,7 +255,7 @@ export default function ChatDetailPage() {
       </div>
 
       {/* Input */}
-      <div className="flex items-end gap-3 rounded-2xl border border-slate-800 bg-slate-900/80 backdrop-blur-sm p-3">
+      <div className="flex items-end gap-2 sm:gap-3 rounded-2xl border border-slate-800 bg-slate-900/80 backdrop-blur-sm p-2 sm:p-3">
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}

@@ -76,16 +76,16 @@ export default function HistoryPage() {
             {data.chats.map((chat: any) => (
               <StaggerItem key={chat._id}>
                 <Card hover className="group">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <Link
                       href={`/dashboard/chats/${chat._id}`}
-                      className="flex items-center gap-4 flex-1 min-w-0"
+                      className="flex items-start sm:items-center gap-3 sm:gap-4 flex-1 min-w-0"
                     >
                       <div className="rounded-xl bg-slate-800 p-3 shrink-0">
                         {getChatTypeIcon(chat.chatType)}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
                           <p className="text-sm font-medium text-white truncate">
                             {truncate(chat.title || "Chat session", 60)}
                           </p>
@@ -109,7 +109,7 @@ export default function HistoryPage() {
                         e.stopPropagation();
                         setDeleteId(chat._id);
                       }}
-                      className="ml-3 rounded-lg p-2 text-slate-600 hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
+                      className="ml-auto sm:ml-3 rounded-lg p-2 text-slate-600 hover:text-red-400 hover:bg-red-500/10 transition-all sm:opacity-0 sm:group-hover:opacity-100"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>

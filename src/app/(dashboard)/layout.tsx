@@ -33,8 +33,9 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-slate-950">
       <Sidebar />
-      <main className="pl-64 transition-all duration-300">
-        <div className="p-6 lg:p-8">{children}</div>
+      {/* pt-14 on mobile for the top bar, md:pt-0 on desktop. pl-0 on mobile, pl-64 on desktop */}
+      <main className="pt-14 md:pt-0 md:pl-64 transition-all duration-300">
+        <div className="p-4 sm:p-6 lg:p-8">{children}</div>
       </main>
     </div>
   );

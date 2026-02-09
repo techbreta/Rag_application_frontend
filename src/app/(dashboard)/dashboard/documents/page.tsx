@@ -116,7 +116,7 @@ export default function DocumentsPage() {
       {/* Documents Grid */}
       {(data?.documents?.length ?? 0) > 0 ? (
         <>
-          <StaggerContainer className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <StaggerContainer className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {data?.documents.map((doc: any) => (
               <StaggerItem key={doc._id}>
                 <Card hover className="group">

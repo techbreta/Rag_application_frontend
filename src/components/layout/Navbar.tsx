@@ -55,6 +55,12 @@ export default function Navbar() {
             >
               Pricing
             </Link>
+            <Link
+              href="/free-images"
+              className="text-sm text-slate-400 hover:text-white transition-colors"
+            >
+              Free Images
+            </Link>
 
             {isAuthenticated ? (
               <Link href="/dashboard">
@@ -114,6 +120,13 @@ export default function Navbar() {
               onClick={() => setMobileOpen(false)}
             >
               Pricing
+            </Link>
+            <Link
+              href="/free-images"
+              className="block text-sm text-slate-400 hover:text-white py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              Free Images
             </Link>
             {isAuthenticated ? (
               <Link href="/dashboard" onClick={() => setMobileOpen(false)}>

@@ -18,6 +18,7 @@ import {
   ArrowRight,
   Sparkles,
   Clock,
+  ImageIcon,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -156,6 +157,58 @@ export default function DashboardPage() {
               <Link href="/dashboard/chat">
                 <Button size="sm" variant="secondary">
                   Start Chatting <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </Card>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <Card className="relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-500/20 to-transparent rounded-bl-full" />
+            <div className="relative">
+              <div className="rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 p-3 w-fit mb-4">
+                <Sparkles className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Generate Image
+              </h3>
+              <p className="text-sm text-slate-400 mb-4">
+                Create AI-generated images from text descriptions.
+              </p>
+              <Link href="/dashboard/generate-image">
+                <Button size="sm" variant="secondary">
+                  Generate Now <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </Card>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
+          <Card className="relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-500/20 to-transparent rounded-bl-full" />
+            <div className="relative">
+              <div className="rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 p-3 w-fit mb-4">
+                <ImageIcon className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Image Gallery
+              </h3>
+              <p className="text-sm text-slate-400 mb-4">
+                View and download your AI-generated images.
+              </p>
+              <Link href="/dashboard/images">
+                <Button size="sm" variant="secondary">
+                  View Gallery <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
             </div>

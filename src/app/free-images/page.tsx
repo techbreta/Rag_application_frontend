@@ -98,20 +98,23 @@ export default function FreeImagesPage() {
 
   const handleDownload = async (imageUrl: string, prompt: string) => {
     try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${prompt.replace(/[^a-zA-Z0-9]/g, "-").substring(0, 50)}-${Date.now()}.png`;
+      // Add Cloudinary's download flag to force download instead of opening in browser
+      const downloadUrl = imageUrl.includes('/upload/')
+        ? imageUrl.replace('/upload/', '/upload/fl_attachment/')
+        : imageUrl;
+      
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `${prompt.replace(/[^a-zA-Z0-9]/g, '-').substring(0, 50)}-${Date.now()}.png`;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
     } catch (err) {
-      console.error("Download failed:", err);
+      console.error('Download failed:', err);
       // Fallback: open in new tab
-      window.open(imageUrl, "_blank");
+      window.open(imageUrl, '_blank');
     }
   };
 

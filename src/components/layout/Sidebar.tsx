@@ -15,6 +15,8 @@ import {
   ChevronRight,
   Menu,
   X,
+  Sparkles,
+  ImageIcon,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
@@ -24,6 +26,8 @@ const navItems = [
   { href: "/dashboard/documents", label: "Documents", icon: FileText },
   { href: "/dashboard/chat", label: "AI Chat", icon: MessageSquare },
   { href: "/dashboard/history", label: "Chat History", icon: History },
+  { href: "/dashboard/generate-image", label: "Generate Image", icon: Sparkles },
+  { href: "/dashboard/images", label: "Image Gallery", icon: ImageIcon },
 ];
 
 export default function Sidebar() {
@@ -56,7 +60,7 @@ export default function Sidebar() {
         >
           <Menu className="h-5 w-5" />
         </button>
-        <Link href="/dashboard" className="ml-3">
+        <Link href="/" className="ml-3">
           <Image
             src="/rag.png"
             alt="RagAI Logo"
@@ -91,7 +95,7 @@ export default function Sidebar() {
       >
         {/* Logo */}
         <div className="flex h-16 items-center justify-between px-4 border-b border-slate-800">
-          <Link href="/dashboard" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <Image
               src="/rag.png"
               alt="RagAI Logo"

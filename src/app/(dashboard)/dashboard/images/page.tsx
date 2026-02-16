@@ -57,22 +57,22 @@ export default function ImageGalleryPage() {
   const handleDownload = async (imageUrl: string, prompt: string) => {
     try {
       // Add Cloudinary's download flag to force download instead of opening in browser
-      const downloadUrl = imageUrl.includes('/upload/')
-        ? imageUrl.replace('/upload/', '/upload/fl_attachment/')
+      const downloadUrl = imageUrl.includes("/upload/")
+        ? imageUrl.replace("/upload/", "/upload/fl_attachment/")
         : imageUrl;
-      
-      const link = document.createElement('a');
+
+      const link = document.createElement("a");
       link.href = downloadUrl;
-      link.download = `${prompt.replace(/[^a-zA-Z0-9]/g, '-').substring(0, 50)}-${Date.now()}.png`;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
+      link.download = `${prompt.replace(/[^a-zA-Z0-9]/g, "-").substring(0, 50)}-${Date.now()}.png`;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (err) {
-      console.error('Download failed:', err);
+      console.error("Download failed:", err);
       // Fallback: open in new tab
-      window.open(imageUrl, '_blank');
+      window.open(imageUrl, "_blank");
     }
   };
 

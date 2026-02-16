@@ -61,6 +61,12 @@ export default function Navbar() {
             >
               Free Images
             </Link>
+            <Link
+              href="/image-editor"
+              className="text-sm text-slate-400 hover:text-white transition-colors"
+            >
+              Image Editor
+            </Link>
 
             {isAuthenticated ? (
               <Link href="/dashboard">
@@ -127,6 +133,13 @@ export default function Navbar() {
               onClick={() => setMobileOpen(false)}
             >
               Free Images
+            </Link>
+            <Link
+              href="/image-editor"
+              className="block text-sm text-slate-400 hover:text-white py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              Image Editor
             </Link>
             {isAuthenticated ? (
               <Link href="/dashboard" onClick={() => setMobileOpen(false)}>

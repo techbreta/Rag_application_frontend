@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@pqina/pintura": "^8.95.7",
+    "@pqina/react-pintura": "^9.0.4",
     "@tanstack/react-query": "^5.90.20",
     "axios": "^1.13.5",
     "clsx": "^2.1.1",

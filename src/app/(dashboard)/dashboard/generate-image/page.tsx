@@ -36,8 +36,9 @@ interface GenerateImageResponse {
 
 export default function GenerateImagePage() {
   const [prompt, setPrompt] = useState("");
-  const [generatedImage, setGeneratedImage] =
-    useState<GenerateImageResponse["data"]["image"] | null>(null);
+  const [generatedImage, setGeneratedImage] = useState<
+    GenerateImageResponse["data"]["image"] | null
+  >(null);
   const queryClient = useQueryClient();
 
   const generateMutation = useMutation({
@@ -64,22 +65,22 @@ export default function GenerateImagePage() {
   const handleDownload = async (imageUrl: string, imagePrompt: string) => {
     try {
       // Add Cloudinary's download flag to force download instead of opening in browser
-      const downloadUrl = imageUrl.includes('/upload/')
-        ? imageUrl.replace('/upload/', '/upload/fl_attachment/')
+      const downloadUrl = imageUrl.includes("/upload/")
+        ? imageUrl.replace("/upload/", "/upload/fl_attachment/")
         : imageUrl;
-      
-      const link = document.createElement('a');
+
+      const link = document.createElement("a");
       link.href = downloadUrl;
-      link.download = `${imagePrompt.replace(/[^a-zA-Z0-9]/g, '-').substring(0, 50)}-${Date.now()}.png`;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
+      link.download = `${imagePrompt.replace(/[^a-zA-Z0-9]/g, "-").substring(0, 50)}-${Date.now()}.png`;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (err) {
-      console.error('Download failed:', err);
+      console.error("Download failed:", err);
       // Fallback: open in new tab
-      window.open(imageUrl, '_blank');
+      window.open(imageUrl, "_blank");
     }
   };
 
@@ -192,7 +193,8 @@ export default function GenerateImagePage() {
               <li className="flex items-start gap-2">
                 <span className="text-violet-400 mt-0.5">•</span>
                 <span>
-                  Specify art styles like &quot;realistic&quot;, &quot;anime&quot;, &quot;oil painting&quot;
+                  Specify art styles like &quot;realistic&quot;,
+                  &quot;anime&quot;, &quot;oil painting&quot;
                 </span>
               </li>
               <li className="flex items-start gap-2">

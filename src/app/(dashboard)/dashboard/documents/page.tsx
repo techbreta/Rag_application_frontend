@@ -17,7 +17,7 @@ import Badge from "@/components/ui/Badge";
 import Modal from "@/components/ui/Modal";
 import EmptyState from "@/components/ui/EmptyState";
 import { PageLoader } from "@/components/ui/Loading";
-import { formatDate, formatFileSize } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import {
   Upload,
   FileText,

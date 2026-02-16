@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
 import AnimatedPage from "@/components/layout/AnimatedPage";
 import Card from "@/components/ui/Card";
 import {
@@ -193,7 +192,7 @@ export default function GenerateImagePage() {
               <li className="flex items-start gap-2">
                 <span className="text-violet-400 mt-0.5">•</span>
                 <span>
-                  Specify art styles like "realistic", "anime", "oil painting"
+                  Specify art styles like &quot;realistic&quot;, &quot;anime&quot;, &quot;oil painting&quot;
                 </span>
               </li>
               <li className="flex items-start gap-2">

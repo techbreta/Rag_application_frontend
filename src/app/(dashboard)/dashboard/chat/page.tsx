@@ -12,7 +12,6 @@ import { TypingIndicator } from "@/components/ui/Loading";
 import {
   Send,
   FileText,
-  Sparkles,
   ChevronDown,
   CheckSquare,
   Square,

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 
+
 interface AnimatedPageProps {
   children: React.ReactNode;
   className?: string;

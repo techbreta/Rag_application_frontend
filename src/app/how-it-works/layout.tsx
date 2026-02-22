@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Learn how RAG AI works in 4 simple steps: upload documents, choose chat mode, ask questions, and get smart answers with source citations.",
   keywords:
-    "RAG, how it works, document processing, AI Q&A, document chat, retrieval augmented generation",
+    "RAG, how it works, document processing, AI Q&A, document chat, retrieval augmented generation, knowledge graph, vector search, semantic search, question answering, AI assistant, document understanding, natural language processing, machine learning, artificial intelligence,RagAI,Rag AI",
   openGraph: {
     title: "How It Works | RAG AI",
     description:
@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     url: "https://rag-ai.example.com/how-it-works",
     type: "website",
   },
+  
 };
 
 export default function HowItWorksLayout({

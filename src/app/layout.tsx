@@ -21,6 +21,8 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.png",
   },
+  keywords:
+    "RAG, Retrieval-Augmented Generation, AI chat, document chat, knowledge graph, vector search, semantic search, question answering, AI assistant, document understanding, natural language processing, machine learning, artificial intelligence,RagAI,Rag AI",
 };
 
 export default function RootLayout({

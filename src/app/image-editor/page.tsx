@@ -40,7 +40,7 @@ import {
 
 import "@pqina/pintura/pintura.css";
 
-// Register all plugins
+// Register plugins
 setPlugins(
   plugin_crop,
   plugin_filter,
@@ -118,47 +118,84 @@ export default function ImageEditorPage() {
       toast.error("Please upload an image first");
       return;
     }
-
     setIsRemovingBg(true);
     try {
-      // Convert image to base64
-      let imageFile: File;
+      // Prepare an image URL to send to backend. If the user uploaded a File,
+      // convert it to a data URL so the backend can fetch/process it.
+      let imageUrlToSend: string;
 
       if (typeof imageSrc === "string") {
-        // Fetch the image from URL
-        const response = await fetch(imageSrc);
-        const blob = await response.blob();
-        imageFile = new File([blob], "image.jpg", { type: blob.type });
+        imageUrlToSend = imageSrc;
       } else {
-        imageFile = imageSrc;
+        // If Cloudinary is configured, upload the file there first so the backend
+        // can use existing Cloudinary-based processing. Otherwise fall back to
+        // data URL inlining.
+        const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
+        const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET;
+
+        if (cloudName && uploadPreset) {
+          const fd = new FormData();
+          fd.append("file", imageSrc as File);
+          fd.append("upload_preset", uploadPreset);
+
+          const cloudResp = await fetch(
+            `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
+            {
+              method: "POST",
+              body: fd,
+            },
+          );
+
+          if (!cloudResp.ok) {
+            const text = await cloudResp.text().catch(() => "");
+            throw new Error(
+              `Cloudinary upload failed: ${cloudResp.status} ${text}`,
+            );
+          }
+
+          const cloudJson = await cloudResp.json();
+          imageUrlToSend = cloudJson.secure_url || cloudJson.url;
+        } else {
+          imageUrlToSend = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+              if (typeof reader.result === "string") resolve(reader.result);
+              else reject(new Error("Failed reading file"));
+            };
+            reader.onerror = (e) => reject(e);
+            reader.readAsDataURL(imageSrc as File);
+          });
+        }
       }
 
-      const formData = new FormData();
-      formData.append("image_file", imageFile);
-      formData.append("size", "auto");
-
-      const response = await fetch("https://api.remove.bg/v1.0/removebg", {
+      const apiBase =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      // Tell backend to delete the temporary Cloudinary image after 10 minutes
+      const resp = await fetch(`${apiBase}/v1/image/remove-background`, {
         method: "POST",
         headers: {
-          "X-Api-Key": process.env.NEXT_PUBLIC_REMOVE_BG_API_KEY || "",
+          "Content-Type": "application/json",
         },
-        body: formData,
+        body: JSON.stringify({
+          imageUrl: imageUrlToSend,
+          deleteAfterMinutes: 10,
+        }),
       });
+      
 
-      if (!response.ok) {
-        throw new Error("Background removal failed");
+      if (!resp.ok) {
+        const text = await resp.text().catch(() => "");
+        throw new Error(`Background removal failed: ${resp.status} ${text}`);
       }
 
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
+      const outBlob = await resp.blob();
+      const url = URL.createObjectURL(outBlob);
       setImageSrc(url);
       setProcessedImage(url);
       toast.success("Background removed successfully!");
     } catch (error) {
       console.error("Error removing background:", error);
-      toast.error(
-        "Failed to remove background. Please add your Remove.bg API key.",
-      );
+      toast.error((error as Error).message || "Failed to remove background.");
     } finally {
       setIsRemovingBg(false);
     }
@@ -196,7 +233,6 @@ export default function ImageEditorPage() {
           className="space-y-8"
         >
           {/* Upload Section */}
-
 
           <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800/50 rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-white mb-4">

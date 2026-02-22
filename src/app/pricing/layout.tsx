@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Simple and transparent pricing for RAG AI. Start free, upgrade to Pro, or contact us for Enterprise solutions. No hidden fees.",
   keywords:
-    "pricing, RAG AI plans, free trial, Pro plan, Enterprise plan, document AI pricing",
+    "pricing, RAG AI plans, free trial, Pro plan, Enterprise plan, document AI pricing, RagAI pricing, AI chat pricing, knowledge graph pricing, vector search pricing, semantic search pricing, question answering pricing, AI assistant pricing, document understanding pricing, natural language processing pricing, machine learning pricing, artificial intelligence pricing,RagAI,Rag AI",
   openGraph: {
     title: "Pricing | RAG AI",
     description:

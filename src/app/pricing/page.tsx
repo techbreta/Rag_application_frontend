@@ -1,7 +1,7 @@
-"use client";
+
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+
 import Navbar from "@/components/layout/Navbar";
 import Button from "@/components/ui/Button";
 import { FadeIn, GlowingOrb } from "@/components/layout/AnimatedPage";
@@ -132,8 +132,8 @@ export default function PricingPage() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan, i) => (
             <FadeIn key={i} delay={i * 0.1}>
-              <motion.div
-                whileHover={{ y: -4 }}
+              <div
+                // whileHover={{ y: -4 }}
                 className={`relative flex flex-col rounded-2xl border p-8 backdrop-blur-sm h-full ${
                   plan.highlight
                     ? "border-violet-500/50 bg-gradient-to-br from-violet-600/10 to-indigo-600/10 shadow-lg shadow-violet-500/10"
@@ -200,7 +200,7 @@ export default function PricingPage() {
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
-              </motion.div>
+              </div>
             </FadeIn>
           ))}
         </div>

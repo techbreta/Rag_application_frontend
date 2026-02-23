@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { ensureCloudinaryHttps } from "@/lib/cloudinary";
 import Button from "@/components/ui/Button";
 import AnimatedPage from "@/components/layout/AnimatedPage";
 import Card from "@/components/ui/Card";
@@ -251,7 +252,7 @@ export default function GenerateImagePage() {
                     {/* Image Preview */}
                     <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-slate-800 border border-slate-700">
                       <Image
-                        src={generatedImage.cloudinaryUrl}
+                        src={ensureCloudinaryHttps(generatedImage.cloudinaryUrl)}
                         alt={generatedImage.prompt}
                         fill
                         className="object-cover"
@@ -284,7 +285,7 @@ export default function GenerateImagePage() {
                         className="flex-1"
                         onClick={() =>
                           handleDownload(
-                            generatedImage.cloudinaryUrl,
+                              ensureCloudinaryHttps(generatedImage.cloudinaryUrl),
                             generatedImage.prompt,
                           )
                         }

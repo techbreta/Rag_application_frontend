@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { ensureCloudinaryHttps } from "@/lib/cloudinary";
 import Button from "@/components/ui/Button";
 import AnimatedPage from "@/components/layout/AnimatedPage";
 import Card from "@/components/ui/Card";
@@ -156,8 +157,8 @@ export default function ImageGalleryPage() {
                 className="relative aspect-square w-full overflow-hidden cursor-pointer bg-slate-800"
                 onClick={() => setLightboxImage(image)}
               >
-                <Image
-                  src={image.cloudinaryUrl}
+                  <Image
+                    src={ensureCloudinaryHttps(image.cloudinaryUrl)}
                   alt={image.prompt}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -179,7 +180,10 @@ export default function ImageGalleryPage() {
                     size="sm"
                     variant="ghost"
                     onClick={() =>
-                      handleDownload(image.cloudinaryUrl, image.prompt)
+                      handleDownload(
+                        ensureCloudinaryHttps(image.cloudinaryUrl),
+                        image.prompt,
+                      )
                     }
                     className="text-violet-400 hover:text-violet-300"
                   >
@@ -244,8 +248,8 @@ export default function ImageGalleryPage() {
 
               {/* Image */}
               <div className="relative w-full flex-1 min-h-0 aspect-square sm:aspect-video">
-                <Image
-                  src={lightboxImage.cloudinaryUrl}
+                  <Image
+                    src={ensureCloudinaryHttps(lightboxImage.cloudinaryUrl)}
                   alt={lightboxImage.prompt}
                   fill
                   className="object-contain"

@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import { ensureCloudinaryHttps } from "@/lib/cloudinary";
 import Navbar from "@/components/layout/Navbar";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -288,7 +289,7 @@ export default function FreeImagesPage() {
                       onClick={() => setLightboxImage(image)}
                     >
                       <Image
-                        src={image.cloudinaryUrl}
+                        src={ensureCloudinaryHttps(image.cloudinaryUrl)}
                         alt={image.prompt}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -318,7 +319,10 @@ export default function FreeImagesPage() {
                           size="sm"
                           variant="ghost"
                           onClick={() =>
-                            handleDownload(image.cloudinaryUrl, image.prompt)
+                            handleDownload(
+                              ensureCloudinaryHttps(image.cloudinaryUrl),
+                              image.prompt,
+                            )
                           }
                           className="ml-auto text-violet-400 hover:text-violet-300"
                         >
@@ -454,8 +458,8 @@ export default function FreeImagesPage() {
 
               {/* Image */}
               <div className="relative w-full flex-1 min-h-0 aspect-square sm:aspect-video">
-                <Image
-                  src={lightboxImage.cloudinaryUrl}
+                  <Image
+                  src={ensureCloudinaryHttps(lightboxImage.cloudinaryUrl)}
                   alt={lightboxImage.prompt}
                   fill
                   className="object-contain"

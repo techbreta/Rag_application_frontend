@@ -21,3 +21,14 @@ export const uploadToCloudinary = async (
 
   return res.data.secure_url;
 };
+
+/**
+ * Ensure Cloudinary URL uses HTTPS to avoid mixed-content issues when site is served over HTTPS.
+ */
+export function ensureCloudinaryHttps(url?: string | null) {
+  if (!url) return url || "";
+  // If the URL already has https, return as-is. If it's protocol-relative or http, force https.
+  return url.replace(/^http:\/\//i, "https://").replace(/^:\/\//, "https://");
+}
+
+export default uploadToCloudinary;

@@ -22,7 +22,6 @@ import {
   Brain,
   Search,
   ArrowRight,
-  Sparkles,
   Globe,
 } from "lucide-react";
 

@@ -22,8 +22,8 @@ interface LocalMessage {
 
 export default function ChatDetailPage() {
   const params = useParams();
-  const chatId = params.chatId as string;
-  const { data: chat, isLoading } = useChatDetails(chatId);
+  const chatId = params?.chatId as string | undefined;
+  const { data: chat, isLoading } = useChatDetails(chatId ?? "");
   const sendMessage = useSendMessage();
 
   const [messages, setMessages] = useState<LocalMessage[]>([]);

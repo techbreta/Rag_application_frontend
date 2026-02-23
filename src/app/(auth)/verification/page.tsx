@@ -16,7 +16,7 @@ function VerificationContent() {
   );
 
   useEffect(() => {
-    const token = searchParams.get("token");
+    const token = searchParams?.get("token");
     if (token) {
       verifyEmail(token)
         .then(() => setStatus("success"))

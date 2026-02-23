@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function middleware(_request: NextRequest) {
   // Protected routes - dashboard area
   // Client-side auth with localStorage is handled in the dashboard layout
   // For cookie-based auth, uncomment below:

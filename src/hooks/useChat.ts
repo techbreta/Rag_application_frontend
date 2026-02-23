@@ -4,13 +4,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import toast from "react-hot-toast";
 
-interface Source {
-  documentId: string;
-  documentName: string;
-  relevantChunk: string;
-  similarity: number;
-}
-
 interface ChatResponse {
   chatId: string;
   answer: string;

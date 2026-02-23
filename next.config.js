@@ -2,9 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    // Allow Cloudinary host used by the app
-    domains: ["res.cloudinary.com"],
-    // and a permissive remote pattern for cloudinary uploads
+ 
     remotePatterns: [
       {
         protocol: "https",

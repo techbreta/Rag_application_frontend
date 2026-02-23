@@ -98,23 +98,36 @@ export default function FreeImagesPage() {
 
   const handleDownload = async (imageUrl: string, prompt: string) => {
     try {
-      // Add Cloudinary's download flag to force download instead of opening in browser
+      // Prefer Cloudinary's fl_attachment transformation which sets Content-Disposition
       const downloadUrl = imageUrl.includes("/upload/")
         ? imageUrl.replace("/upload/", "/upload/fl_attachment/")
         : imageUrl;
 
+      // Fetch the image as a blob and create an object URL so the browser will download
+      // the file reliably even across origins (depends on CORS headers; Cloudinary allows it).
+      const resp = await fetch(downloadUrl, { mode: "cors" });
+      if (!resp.ok)
+        throw new Error(`Failed to download image (${resp.status})`);
+
+      const blob = await resp.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
+      const filename = `${prompt.replace(/[^a-zA-Z0-9]/g, "-").substring(0, 50)}-${Date.now()}.png`;
       const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.download = `${prompt.replace(/[^a-zA-Z0-9]/g, "-").substring(0, 50)}-${Date.now()}.png`;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
+      link.href = blobUrl;
+      link.download = filename;
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+      link.remove();
+      // release memory
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
     } catch (err) {
       console.error("Download failed:", err);
-      // Fallback: open in new tab
-      window.open(imageUrl, "_blank");
+      // Fallback: try opening Cloudinary fl_attachment URL in a new tab
+      const alt = imageUrl.includes("/upload/")
+        ? imageUrl.replace("/upload/", "/upload/fl_attachment/")
+        : imageUrl;
+      window.open(alt, "_blank", "noopener,noreferrer");
     }
   };
 

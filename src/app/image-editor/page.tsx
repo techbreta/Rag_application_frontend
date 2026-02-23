@@ -185,11 +185,14 @@ export default function ImageEditorPage() {
 
       if (!resp.ok) {
         const text = await resp.text().catch(() => "");
-        throw new Error(`Background removal failed: ${resp.status} ${text}`);
+        throw new Error(
+          `Background removal failed: ${resp.status} ${text}`,
+        );
       }
 
-      const outBlob = await resp.blob();
-      const url = URL.createObjectURL(outBlob);
+      const json = await resp.json();
+      const url = json.url;
+
       setImageSrc(url);
       setProcessedImage(url);
       toast.success("Background removed successfully!");

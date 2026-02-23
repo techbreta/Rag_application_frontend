@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { PinturaEditor } from "@pqina/react-pintura";
 import Navbar from "@/components/layout/Navbar";
+import { ensureCloudinaryHttps } from "@/lib/cloudinary";
 import { Download, Scissors } from "lucide-react";
 import toast from "react-hot-toast";
 import {
@@ -133,7 +134,7 @@ export default function ImageEditorPage() {
         const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
         const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET;
 
-        if (cloudName && uploadPreset) {
+          if (cloudName && uploadPreset) {
           const fd = new FormData();
           fd.append("file", imageSrc as File);
           fd.append("upload_preset", uploadPreset);
@@ -154,7 +155,7 @@ export default function ImageEditorPage() {
           }
 
           const cloudJson = await cloudResp.json();
-          imageUrlToSend = cloudJson.secure_url || cloudJson.url;
+          imageUrlToSend = ensureCloudinaryHttps(cloudJson.secure_url || cloudJson.url);
         } else {
           imageUrlToSend = await new Promise<string>((resolve, reject) => {
             const reader = new FileReader();
@@ -191,7 +192,7 @@ export default function ImageEditorPage() {
       }
 
       const json = await resp.json();
-      const url = json.url;
+      const url = ensureCloudinaryHttps(json.url);
 
       setImageSrc(url);
       setProcessedImage(url);

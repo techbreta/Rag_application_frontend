@@ -169,7 +169,7 @@ export default function ImageEditorPage() {
       }
 
       const apiBase =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+        process.env.NEXT_PUBLIC_BG_URL || "http://localhost:4500";
       // Tell backend to delete the temporary Cloudinary image after 10 minutes
       const resp = await fetch(`${apiBase}/v1/image/remove-background`, {
         method: "POST",

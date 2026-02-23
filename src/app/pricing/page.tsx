@@ -13,7 +13,7 @@ const plans = [
     price: "$0",
     period: "forever",
     description:
-      "Perfect for getting started and exploring RAG AI capabilities.",
+      "Perfect for getting started and exploring RagAI capabilities.",
     icon: Sparkles,
     color: "from-slate-500 to-slate-600",
     highlight: false,
@@ -255,7 +255,7 @@ export default function PricingPage() {
       {/* Footer */}
       <footer className="border-t border-slate-800/50 py-8 px-4">
         <div className="max-w-7xl mx-auto text-center text-sm text-slate-500">
-          © {new Date().getFullYear()} RAG AI. All rights reserved.
+          © {new Date().getFullYear()} RagAI. All rights reserved.
         </div>
       </footer>
     </main>

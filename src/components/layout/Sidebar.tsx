@@ -26,7 +26,11 @@ const navItems = [
   { href: "/dashboard/documents", label: "Documents", icon: FileText },
   { href: "/dashboard/chat", label: "AI Chat", icon: MessageSquare },
   { href: "/dashboard/history", label: "Chat History", icon: History },
-  { href: "/dashboard/generate-image", label: "Generate Image", icon: Sparkles },
+  {
+    href: "/dashboard/generate-image",
+    label: "Generate Image",
+    icon: Sparkles,
+  },
   { href: "/dashboard/images", label: "Image Gallery", icon: ImageIcon },
 ];
 

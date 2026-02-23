@@ -1,8 +1,8 @@
-"use client";
+// "use client";
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Button from "@/components/ui/Button";
 import {
@@ -105,10 +105,10 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-6xl text-center">
           <FadeIn>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1 }}
+            <div
+              // initial={{ opacity: 0, scale: 0.1 }}
+              // animate={{ opacity: 1, scale: 1 }}
+              // transition={{ delay: 0.1 }}
               className="inline-flex items-center  rounded-full border border-violet-500/30 bg-violet-500/10 px-4 mb-8"
             >
               <Image
@@ -121,7 +121,7 @@ export default function Home() {
               <span className="text-sm text-violet-300">
                 Powered by Advanced AI
               </span>
-            </motion.div>
+            </div>
           </FadeIn>
 
           <FadeIn delay={0.1}>
@@ -227,8 +227,8 @@ export default function Home() {
           <StaggerContainer className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, i) => (
               <StaggerItem key={i}>
-                <motion.div
-                  whileHover={{ y: -6, scale: 1.02 }}
+                <div
+                  // whileHover={{ y: -6, scale: 1.02 }}
                   className="group relative rounded-2xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-sm hover:border-violet-500/30 transition-all duration-300"
                 >
                   <div
@@ -242,7 +242,7 @@ export default function Home() {
                   <p className="text-sm text-slate-400 leading-relaxed">
                     {feature.description}
                   </p>
-                </motion.div>
+                </div>
               </StaggerItem>
             ))}
           </StaggerContainer>
@@ -359,7 +359,7 @@ export default function Home() {
             />
           </div>
           <p className="text-sm text-slate-500">
-            © {new Date()?.getFullYear()} RAGAI. All rights reserved.
+            © {new Date()?.getFullYear()} RagAI. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link

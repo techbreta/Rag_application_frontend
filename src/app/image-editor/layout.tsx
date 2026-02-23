@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { ReactNode } from "react";
 export const metadata: Metadata = {
-  title: "RAGAI — Image Editor & Background Remover",
+  title: "RagAI — Image Editor & Background Remover",
   description:
     "Free, powerful image editor with crop, filters, annotations, stickers, frames and an AI-powered background remover. Upload or paste images, edit with Pintura-powered tools, and download the result.",
   icons: {

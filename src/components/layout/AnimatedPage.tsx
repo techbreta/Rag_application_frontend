@@ -1,7 +1,7 @@
-"use client";
-
-import { motion } from "framer-motion";
-
+// Server-safe AnimatedPage helpers
+// This file intentionally avoids client-only libraries (like framer-motion)
+// so it can be used in Server Components. For client-side animations use
+// `AnimatedPage.client.tsx` which contains the framer-motion implementation.
 
 interface AnimatedPageProps {
   children: React.ReactNode;
@@ -13,15 +13,9 @@ export default function AnimatedPage({
   className,
 }: AnimatedPageProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className={className}
-    >
+    <div className={className}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -34,16 +28,11 @@ export function FadeIn({
   delay?: number;
   className?: string;
 }) {
+  // Server-rendered placeholder — client pages may opt-in to animations
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay, ease: "easeOut" }}
-      className={className}
-    >
+    <div className={className} data-anim="fade-in" data-anim-delay={delay}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -58,23 +47,15 @@ export function SlideIn({
   delay?: number;
   className?: string;
 }) {
-  const directionMap = {
-    left: { x: -60, y: 0 },
-    right: { x: 60, y: 0 },
-    up: { x: 0, y: 60 },
-    down: { x: 0, y: -60 },
-  };
-
   return (
-    <motion.div
-      initial={{ opacity: 0, ...directionMap[direction] }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+    <div
       className={className}
+      data-anim="slide-in"
+      data-anim-direction={direction}
+      data-anim-delay={delay}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -88,15 +69,9 @@ export function ScaleIn({
   className?: string;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay, type: "spring", bounce: 0.3 }}
-      className={className}
-    >
+    <div className={className} data-anim="scale-in" data-anim-delay={delay}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -108,17 +83,9 @@ export function StaggerContainer({
   className?: string;
 }) {
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={{
-        hidden: {},
-        visible: { transition: { staggerChildren: 0.1 } },
-      }}
-      className={className}
-    >
+    <div className={className} data-anim="stagger-container">
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -130,15 +97,9 @@ export function StaggerItem({
   className?: string;
 }) {
   return (
-    <motion.div
-      variants={{
-        hidden: { opacity: 0, scale: 0.95 },
-        visible: { opacity: 1, scale: 1, transition: { duration: 0.4 } },
-      }}
-      className={className}
-    >
+    <div className={className} data-anim="stagger-item">
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -152,25 +113,16 @@ export function FloatingElement({
   duration?: number;
 }) {
   return (
-    <motion.div
-      animate={{ y: [-10, 10, -10] }}
-      transition={{ duration, repeat: Infinity, ease: "easeInOut" }}
+    <div
       className={className}
+      data-anim="floating"
+      data-anim-duration={duration}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
 export function GlowingOrb({ className }: { className?: string }) {
-  return (
-    <motion.div
-      animate={{
-        scale: [1, 1.2, 1],
-        opacity: [0.3, 0.6, 0.3],
-      }}
-      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      className={`absolute rounded-full blur-3xl ${className}`}
-    />
-  );
+  return <div className={`absolute rounded-full blur-3xl ${className}`} />;
 }

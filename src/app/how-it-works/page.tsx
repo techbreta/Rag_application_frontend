@@ -1,8 +1,8 @@
-"use client";
+// "use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Button from "@/components/ui/Button";
 import { FadeIn, GlowingOrb } from "@/components/layout/AnimatedPage";
@@ -22,7 +22,7 @@ const steps = [
     step: "01",
     title: "Upload Your Documents",
     description:
-      "Drag and drop your PDFs, DOCX, or TXT files into RAG AI. We'll automatically extract the text, split it into meaningful chunks, and create vector embeddings for fast retrieval.",
+      "Drag and drop your PDFs, DOCX, or TXT files into RagAI. We'll automatically extract the text, split it into meaningful chunks, and create vector embeddings for fast retrieval.",
     icon: Upload,
     color: "from-violet-500 to-purple-600",
     details: [
@@ -97,7 +97,7 @@ export default function HowItWorksPage() {
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               How{" "}
               <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                RAG AI
+                RagAI
               </span>{" "}
               works
             </h1>
@@ -146,8 +146,8 @@ export default function HowItWorksPage() {
                 </div>
 
                 {/* Visual */}
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
+                <div
+                  // whileHover={{ scale: 1.02 }}
                   className="flex-1 w-full"
                 >
                   <div className="relative rounded-2xl border border-slate-800 bg-slate-900/50 p-8 backdrop-blur-sm">
@@ -234,8 +234,7 @@ export default function HowItWorksPage() {
                                 alt="Sparkle"
                                 width={400}
                                 height={400}
-                                 className="text-violet-400 h-10 w-auto"
-
+                                className="text-violet-400 h-10 w-auto"
                               />
                             </div>
                             <div className="flex gap-1">
@@ -274,7 +273,7 @@ export default function HowItWorksPage() {
                       )}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </div>
             </FadeIn>
           ))}
@@ -309,7 +308,7 @@ export default function HowItWorksPage() {
       {/* Footer */}
       <footer className="border-t border-slate-800/50 py-8 px-4">
         <div className="max-w-7xl mx-auto text-center text-sm text-slate-500">
-          © {new Date().getFullYear()} RAG AI. All rights reserved.
+          © {new Date().getFullYear()} RagAI. All rights reserved.
         </div>
       </footer>
     </main>

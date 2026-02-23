@@ -134,7 +134,7 @@ export default function ImageEditorPage() {
         const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
         const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET;
 
-          if (cloudName && uploadPreset) {
+        if (cloudName && uploadPreset) {
           const fd = new FormData();
           fd.append("file", imageSrc as File);
           fd.append("upload_preset", uploadPreset);
@@ -155,7 +155,9 @@ export default function ImageEditorPage() {
           }
 
           const cloudJson = await cloudResp.json();
-          imageUrlToSend = ensureCloudinaryHttps(cloudJson.secure_url || cloudJson.url);
+          imageUrlToSend = ensureCloudinaryHttps(
+            cloudJson.secure_url || cloudJson.url,
+          );
         } else {
           imageUrlToSend = await new Promise<string>((resolve, reject) => {
             const reader = new FileReader();
@@ -169,8 +171,7 @@ export default function ImageEditorPage() {
         }
       }
 
-      const apiBase =
-        process.env.NEXT_PUBLIC_BG_URL || "http://localhost:4500";
+      const apiBase = process.env.NEXT_PUBLIC_BG_URL || "http://localhost:4500";
       // Tell backend to delete the temporary Cloudinary image after 10 minutes
       const resp = await fetch(`${apiBase}/v1/image/remove-background`, {
         method: "POST",
@@ -182,13 +183,10 @@ export default function ImageEditorPage() {
           deleteAfterMinutes: 10,
         }),
       });
-      
 
       if (!resp.ok) {
         const text = await resp.text().catch(() => "");
-        throw new Error(
-          `Background removal failed: ${resp.status} ${text}`,
-        );
+        throw new Error(`Background removal failed: ${resp.status} ${text}`);
       }
 
       const json = await resp.json();

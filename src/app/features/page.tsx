@@ -1,7 +1,7 @@
-"use client";
+// "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Button from "@/components/ui/Button";
 import {
@@ -23,6 +23,8 @@ import {
   Lock,
   BarChart3,
   RefreshCw,
+  ImageIcon,
+  Edit,
   ArrowRight,
 } from "lucide-react";
 
@@ -109,6 +111,19 @@ const mainFeatures = [
 
 const additionalFeatures = [
   {
+    icon: ImageIcon,
+    title: "Free Images",
+    description:
+      "Browse and download a curated gallery of free AI-generated images.",
+    href: "/free-images",
+  },
+  {
+    icon: Edit,
+    title: "Image Editor",
+    description: "Quickly edit and enhance images using our in-browser editor.",
+    href: "/image-editor",
+  },
+  {
     icon: FileText,
     title: "Document Management",
     description:
@@ -173,7 +188,7 @@ export default function FeaturesPage() {
           </FadeIn>
           <FadeIn delay={0.2}>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-              RAG AI combines document processing, vector search, and AI chat to
+              RagAI combines document processing, vector search, and AI chat to
               give you instant answers from your documents with full source
               citations.
             </p>
@@ -187,8 +202,8 @@ export default function FeaturesPage() {
           <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {mainFeatures.map((feature, i) => (
               <StaggerItem key={i}>
-                <motion.div
-                  whileHover={{ y: -5 }}
+                <div
+                  // whileHover={{ y: -5 }}
                   className="relative rounded-2xl border border-slate-800 bg-slate-900/50 p-6 h-full backdrop-blur-sm hover:border-violet-500/30 transition-colors"
                 >
                   <div
@@ -213,7 +228,7 @@ export default function FeaturesPage() {
                       </li>
                     ))}
                   </ul>
-                </motion.div>
+                </div>
               </StaggerItem>
             ))}
           </StaggerContainer>
@@ -229,7 +244,7 @@ export default function FeaturesPage() {
                 And much more...
               </h2>
               <p className="text-slate-400 max-w-xl mx-auto">
-                Additional features that make RAG AI the complete document
+                Additional features that make RagAI the complete document
                 intelligence platform.
               </p>
             </div>
@@ -238,19 +253,37 @@ export default function FeaturesPage() {
           <StaggerContainer className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {additionalFeatures.map((feature, i) => (
               <StaggerItem key={i}>
-                <div className="flex items-start gap-4 rounded-xl border border-slate-800 bg-slate-900/30 p-5 hover:border-slate-700 transition-colors">
-                  <div className="rounded-lg bg-violet-500/10 p-2.5 shrink-0">
-                    <feature.icon className="h-5 w-5 text-violet-400" />
+                {feature.href ? (
+                  <Link href={feature.href} className="block">
+                    <div className="flex items-start gap-4 rounded-xl border border-slate-800 bg-slate-900/30 p-5 hover:border-slate-700 transition-colors">
+                      <div className="rounded-lg bg-violet-500/10 p-2.5 shrink-0">
+                        <feature.icon className="h-5 w-5 text-violet-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-white mb-1">
+                          {feature.title}
+                        </h3>
+                        <p className="text-xs text-slate-400">
+                          {feature.description}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ) : (
+                  <div className="flex items-start gap-4 rounded-xl border border-slate-800 bg-slate-900/30 p-5 hover:border-slate-700 transition-colors">
+                    <div className="rounded-lg bg-violet-500/10 p-2.5 shrink-0">
+                      <feature.icon className="h-5 w-5 text-violet-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-semibold text-white mb-1">
+                        {feature.title}
+                      </h3>
+                      <p className="text-xs text-slate-400">
+                        {feature.description}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-white mb-1">
-                      {feature.title}
-                    </h3>
-                    <p className="text-xs text-slate-400">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
+                )}
               </StaggerItem>
             ))}
           </StaggerContainer>
@@ -280,7 +313,7 @@ export default function FeaturesPage() {
       {/* Footer */}
       <footer className="border-t border-slate-800/50 py-8 px-4">
         <div className="max-w-7xl mx-auto text-center text-sm text-slate-500">
-          © {new Date().getFullYear()} RAG AI. All rights reserved.
+          © {new Date().getFullYear()} RagAI. All rights reserved.
         </div>
       </footer>
     </main>

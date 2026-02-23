@@ -8,15 +8,10 @@ import Button from "@/components/ui/Button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
-
-
-
 export default function Navbar() {
-
   const { isAuthenticated } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}

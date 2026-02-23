@@ -157,8 +157,8 @@ export default function ImageGalleryPage() {
                 className="relative aspect-square w-full overflow-hidden cursor-pointer bg-slate-800"
                 onClick={() => setLightboxImage(image)}
               >
-                  <Image
-                    src={ensureCloudinaryHttps(image.cloudinaryUrl)}
+                <Image
+                  src={ensureCloudinaryHttps(image.cloudinaryUrl)}
                   alt={image.prompt}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -248,8 +248,8 @@ export default function ImageGalleryPage() {
 
               {/* Image */}
               <div className="relative w-full flex-1 min-h-0 aspect-square sm:aspect-video">
-                  <Image
-                    src={ensureCloudinaryHttps(lightboxImage.cloudinaryUrl)}
+                <Image
+                  src={ensureCloudinaryHttps(lightboxImage.cloudinaryUrl)}
                   alt={lightboxImage.prompt}
                   fill
                   className="object-contain"

@@ -1,15 +1,15 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Features | RAG AI - Advanced Document Intelligence",
+  title: "Features | RagAI - Advanced Document Intelligence",
   description:
-    "Explore RAG AI's powerful features including multi-document chat, intelligent source citations, and advanced document processing. Secure, fast, and intuitive document Q&A.",
+    "Explore RagAI's powerful features including multi-document chat, intelligent source citations, and advanced document processing. Secure, fast, and intuitive document Q&A.",
   keywords:
     "RAG, document AI, document chat, Q&A, document intelligence, vector search",
   openGraph: {
-    title: "Features | RAG AI",
+    title: "Features | RagAI",
     description:
-      "Explore RAG AI's powerful features for document intelligence and Q&A",
+      "Explore RagAI's powerful features for document intelligence and Q&A",
     url: "https://rag-ai.example.com/features",
     type: "website",
   },

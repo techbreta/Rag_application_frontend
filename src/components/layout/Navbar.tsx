@@ -67,6 +67,12 @@ export default function Navbar() {
             >
               Image Editor
             </Link>
+            <Link
+              href="/document-converter"
+              className="text-sm text-slate-400 hover:text-white transition-colors"
+            >
+              Doc Converter
+            </Link>
 
             {isAuthenticated ? (
               <Link href="/dashboard">
@@ -140,6 +146,13 @@ export default function Navbar() {
               onClick={() => setMobileOpen(false)}
             >
               Image Editor
+            </Link>
+            <Link
+              href="/document-converter"
+              className="block text-sm text-slate-400 hover:text-white py-2"
+              onClick={() => setMobileOpen(false)}
+            >
+              Doc Converter
             </Link>
             {isAuthenticated ? (
               <Link href="/dashboard" onClick={() => setMobileOpen(false)}>

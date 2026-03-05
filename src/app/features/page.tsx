@@ -26,6 +26,7 @@ import {
   ImageIcon,
   Edit,
   ArrowRight,
+  FileOutput,
 } from "lucide-react";
 
 const mainFeatures = [
@@ -122,6 +123,13 @@ const additionalFeatures = [
     title: "Image Editor",
     description: "Quickly edit and enhance images using our in-browser editor.",
     href: "/image-editor",
+  },
+  {
+    icon: FileOutput,
+    title: "Document Converter",
+    description:
+      "Convert documents between 16+ formats — PDF, DOCX, XLSX, PPTX, HTML, and more.",
+    href: "/document-converter",
   },
   {
     icon: FileText,

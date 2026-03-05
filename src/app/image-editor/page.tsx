@@ -1,119 +1,93 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { PinturaEditor } from "@pqina/react-pintura";
+import dynamic from "next/dynamic";
 import Navbar from "@/components/layout/Navbar";
 import { ensureCloudinaryHttps } from "@/lib/cloudinary";
-import { Download, Scissors } from "lucide-react";
+import { Download, Scissors, Upload } from "lucide-react";
 import toast from "react-hot-toast";
-import {
-  createDefaultImageReader,
-  createDefaultImageWriter,
-  createDefaultImageOrienter,
-  createDefaultShapePreprocessor,
-  createDefaultImageScrambler,
-  setPlugins,
-  plugin_crop,
-  plugin_crop_locale_en_gb,
-  plugin_filter,
-  plugin_filter_defaults,
-  plugin_filter_locale_en_gb,
-  plugin_finetune,
-  plugin_finetune_defaults,
-  plugin_finetune_locale_en_gb,
-  plugin_annotate,
-  plugin_annotate_locale_en_gb,
-  markup_editor_defaults,
-  markup_editor_locale_en_gb,
-  plugin_sticker,
-  plugin_sticker_locale_en_gb,
-  plugin_frame,
-  plugin_frame_locale_en_gb,
-  plugin_redact,
-  plugin_redact_locale_en_gb,
-  plugin_decorate,
-  plugin_decorate_locale_en_gb,
-  plugin_resize,
-  plugin_resize_locale_en_gb,
-  locale_en_gb,
-} from "@pqina/pintura";
 
-import "@pqina/pintura/pintura.css";
-
-// Register plugins
-setPlugins(
-  plugin_crop,
-  plugin_filter,
-  plugin_finetune,
-  plugin_annotate,
-  plugin_sticker,
-  plugin_frame,
-  plugin_redact,
-  plugin_decorate,
-  plugin_resize,
+// Dynamically import Filerobot to avoid SSR issues (canvas/konva)
+const FilerobotImageEditor = dynamic(
+  () => import("react-filerobot-image-editor").then((mod) => mod.default),
+  { ssr: false },
 );
 
-const editorDefaults = {
-  imageReader: createDefaultImageReader(),
-  imageWriter: createDefaultImageWriter(),
-  imageOrienter: createDefaultImageOrienter(),
-  shapePreprocessor: createDefaultShapePreprocessor(),
-  imageScrambler: createDefaultImageScrambler(),
-  ...plugin_finetune_defaults,
-  ...plugin_filter_defaults,
-  ...markup_editor_defaults,
-  locale: {
-    ...locale_en_gb,
-    ...plugin_crop_locale_en_gb,
-    ...plugin_filter_locale_en_gb,
-    ...plugin_finetune_locale_en_gb,
-    ...plugin_annotate_locale_en_gb,
-    ...markup_editor_locale_en_gb,
-    ...plugin_sticker_locale_en_gb,
-    ...plugin_frame_locale_en_gb,
-    ...plugin_redact_locale_en_gb,
-    ...plugin_decorate_locale_en_gb,
-    ...plugin_resize_locale_en_gb,
-  },
-};
+// We also need TABS — import them separately so they resolve at runtime
+let TABS_PROMISE: Promise<any> | null = null;
+function getTabsPromise() {
+  if (!TABS_PROMISE) {
+    TABS_PROMISE = import("react-filerobot-image-editor").then(
+      (mod) => mod.TABS,
+    );
+  }
+  return TABS_PROMISE;
+}
 
 export default function ImageEditorPage() {
-  const [imageSrc, setImageSrc] = useState<string | File>(
+  const [imageSrc, setImageSrc] = useState<string>(
     "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=800&auto=format&fit=crop",
   );
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [processedImage, setProcessedImage] = useState<string | null>(null);
   const [isRemovingBg, setIsRemovingBg] = useState(false);
-  const editorRef = useRef<any>(null);
+  const [showEditor, setShowEditor] = useState(true);
+  const [tabs, setTabs] = useState<any>(null);
 
+  // Resolve TABS on mount
+  useEffect(() => {
+    getTabsPromise().then(setTabs);
+  }, []);
+
+  /* ── file picker ── */
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-      setImageSrc(file);
+      const url = URL.createObjectURL(file);
+      setImageSrc(url);
+      setProcessedImage(null);
+      // Force remount of editor
+      setShowEditor(false);
+      setTimeout(() => setShowEditor(true), 50);
     }
   };
 
-  const handleProcess = (output: any) => {
-    console.log("Image processed:", output);
-    const url = URL.createObjectURL(output.dest);
-    setProcessedImage(url);
-    toast.success("Image processed successfully!");
+  /* ── on save from editor ── */
+  const handleSave = (editedImageObject: any) => {
+    const { imageBase64, fullName } = editedImageObject;
+    if (imageBase64) {
+      setProcessedImage(imageBase64);
+      // Immediately trigger download
+      const a = document.createElement("a");
+      a.href = imageBase64;
+      a.download = fullName || `edited-image-${Date.now()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      toast.success("Image downloaded!");
+    }
   };
 
+  /* ── download ── */
   const handleDownload = () => {
     if (!processedImage) {
-      toast.error("Please process the image first");
+      toast.error(
+        "Please save the edited image first (click Save in the editor)",
+      );
       return;
     }
     const a = document.createElement("a");
     a.href = processedImage;
-    a.download = "edited-image.png";
+    a.download = `edited-image-${Date.now()}.png`;
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     toast.success("Image downloaded!");
   };
 
+  /* ── remove background ── */
   const removeBackground = async () => {
     if (!imageSrc) {
       toast.error("Please upload an image first");
@@ -121,63 +95,42 @@ export default function ImageEditorPage() {
     }
     setIsRemovingBg(true);
     try {
-      // Prepare an image URL to send to backend. If the user uploaded a File,
-      // convert it to a data URL so the backend can fetch/process it.
       let imageUrlToSend: string;
 
-      if (typeof imageSrc === "string") {
-        imageUrlToSend = imageSrc;
-      } else {
-        // If Cloudinary is configured, upload the file there first so the backend
-        // can use existing Cloudinary-based processing. Otherwise fall back to
-        // data URL inlining.
+      if (imageSrc.startsWith("blob:")) {
+        // Upload the local file to Cloudinary first
         const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
         const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET;
 
-        if (cloudName && uploadPreset) {
-          const fd = new FormData();
-          fd.append("file", imageSrc as File);
-          fd.append("upload_preset", uploadPreset);
-
-          const cloudResp = await fetch(
-            `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
-            {
-              method: "POST",
-              body: fd,
-            },
-          );
-
-          if (!cloudResp.ok) {
-            const text = await cloudResp.text().catch(() => "");
-            throw new Error(
-              `Cloudinary upload failed: ${cloudResp.status} ${text}`,
-            );
-          }
-
-          const cloudJson = await cloudResp.json();
-          imageUrlToSend = ensureCloudinaryHttps(
-            cloudJson.secure_url || cloudJson.url,
-          );
-        } else {
-          imageUrlToSend = await new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-              if (typeof reader.result === "string") resolve(reader.result);
-              else reject(new Error("Failed reading file"));
-            };
-            reader.onerror = (e) => reject(e);
-            reader.readAsDataURL(imageSrc as File);
-          });
+        if (!cloudName || !uploadPreset || !selectedFile) {
+          throw new Error("Cloudinary not configured or no file selected");
         }
+
+        const fd = new FormData();
+        fd.append("file", selectedFile);
+        fd.append("upload_preset", uploadPreset);
+
+        const cloudResp = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
+          { method: "POST", body: fd },
+        );
+
+        if (!cloudResp.ok) {
+          throw new Error(`Cloudinary upload failed: ${cloudResp.status}`);
+        }
+
+        const cloudJson = await cloudResp.json();
+        imageUrlToSend = ensureCloudinaryHttps(
+          cloudJson.secure_url || cloudJson.url,
+        );
+      } else {
+        imageUrlToSend = imageSrc;
       }
 
       const apiBase = process.env.NEXT_PUBLIC_BG_URL || "http://localhost:4500";
-      // Tell backend to delete the temporary Cloudinary image after 10 minutes
       const resp = await fetch(`${apiBase}/v1/image/remove-background`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           imageUrl: imageUrlToSend,
           deleteAfterMinutes: 10,
@@ -194,6 +147,9 @@ export default function ImageEditorPage() {
 
       setImageSrc(url);
       setProcessedImage(url);
+      // Remount editor with new source
+      setShowEditor(false);
+      setTimeout(() => setShowEditor(true), 50);
       toast.success("Background removed successfully!");
     } catch (error) {
       console.error("Error removing background:", error);
@@ -220,7 +176,8 @@ export default function ImageEditorPage() {
             </h1>
             <p className="text-slate-400 text-lg max-w-2xl">
               Edit your images with powerful tools including crop, filters,
-              annotations, stickers, frames, and more.
+              annotations, stickers, frames, and more — completely free, no
+              watermarks.
             </p>
           </motion.div>
         </div>
@@ -234,8 +191,7 @@ export default function ImageEditorPage() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="space-y-8"
         >
-          {/* Upload Section */}
-
+          {/* Toolbar */}
           <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800/50 rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-white mb-4">
               Upload Your Image
@@ -249,6 +205,7 @@ export default function ImageEditorPage() {
                   className="hidden"
                 />
                 <div className="px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-lg font-semibold hover:from-violet-700 hover:to-indigo-700 transition-all duration-200 shadow-lg shadow-violet-500/20 flex items-center gap-2">
+                  <Upload className="h-4 w-4" />
                   Choose Image
                 </div>
               </label>
@@ -278,51 +235,71 @@ export default function ImageEditorPage() {
               )}
             </div>
           </div>
+
           {/* Editor */}
-          {imageSrc && (
+          {imageSrc && showEditor && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
               className="bg-slate-900/50 backdrop-blur-sm border border-slate-800/50 rounded-2xl overflow-hidden"
             >
-              <div className="p-4 border-b border-slate-800/50 flex justify-between items-center">
-                <h3 className="text-lg font-semibold text-white">
-                  Edit Your Image
-                </h3>
-                <button
-                  onClick={handleDownload}
-                  disabled={!processedImage}
-                  className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg font-medium hover:from-emerald-700 hover:to-teal-700 transition-all duration-200 shadow-lg shadow-emerald-500/20 flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <Download className="h-4 w-4" />
-                  Download
-                </button>
-              </div>
-              <div className="h-[600px] md:h-[700px] lg:h-[800px] p-4">
-                <PinturaEditor
-                  ref={editorRef}
-                  {...editorDefaults}
-                  src={imageSrc}
-                  onProcess={handleProcess}
-                  imageCropAspectRatio={undefined}
-                  className="pintura-editor"
+              <div className="h-[600px] md:h-[700px] lg:h-[800px]">
+                <FilerobotImageEditor
+                  source={imageSrc}
+                  onSave={handleSave}
+                  onClose={() => {}}
+                  annotationsCommon={{
+                    fill: "#ff0000",
+                  }}
+                  Text={{ text: "Add text here..." }}
+                  Rotate={{ angle: 90, componentType: "slider" }}
+                  tabsIds={
+                    tabs
+                      ? [
+                          tabs.ADJUST,
+                          tabs.ANNOTATE,
+                          tabs.FINETUNE,
+                          tabs.FILTERS,
+                          tabs.RESIZE,
+                          tabs.WATERMARK,
+                        ]
+                      : []
+                  }
+                  defaultTabId={tabs?.ADJUST}
+                  defaultSavedImageName="edited-image"
+                  defaultSavedImageType="png"
+                  defaultSavedImageQuality={0.92}
+                  savingPixelRatio={4}
+                  previewPixelRatio={typeof window !== "undefined" ? window.devicePixelRatio : 1}
+                  observePluginContainerSize={true}
+                  avoidChangesNotSavedAlertOnLeave={true}
+                  resetOnImageSourceChange={true}
+                  theme={{
+                    palette: {
+                      "bg-secondary": "#0f172a",
+                      "bg-primary": "#1e293b",
+                      "bg-primary-active": "#334155",
+                      "accent-primary": "#7c3aed",
+                      "accent-primary-active": "#6d28d9",
+                      "icons-primary": "#e2e8f0",
+                      "icons-secondary": "#94a3b8",
+                      "borders-secondary": "#334155",
+                      "borders-primary": "#475569",
+                      "borders-strong": "#64748b",
+                      "light-shadow": "rgba(0, 0, 0, 0.3)",
+                      warning: "#f59e0b",
+                    },
+                    typography: {
+                      fontFamily: "Inter, system-ui, sans-serif",
+                    },
+                  }}
                 />
               </div>
             </motion.div>
           )}
         </motion.div>
       </div>
-
-      {/* Custom Styles */}
-      <style jsx global>{`
-        .pintura-editor {
-          --color-background: 20 20 31;
-          --color-foreground: 255 255 255;
-          border-radius: 1rem;
-          overflow: hidden;
-        }
-      `}</style>
     </div>
   );
 }

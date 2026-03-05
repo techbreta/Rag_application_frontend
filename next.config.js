@@ -2,7 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
- 
     remotePatterns: [
       {
         protocol: "https",
@@ -17,6 +16,19 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
+  },
+  webpack: (config, { isServer }) => {
+    // konva/canvas is only needed client-side; stub it out during SSR builds
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push({ canvas: "commonjs canvas" });
+    } else {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        canvas: false,
+      };
+    }
+    return config;
   },
 };
 

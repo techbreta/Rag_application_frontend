@@ -92,7 +92,7 @@ export default function RegisterPage() {
             <Input
               label="Full Name"
               type="text"
-              placeholder="John Doe"
+              placeholder="Toba Noori"
               icon={<User className="h-4 w-4" />}
               error={errors.name?.message}
               {...register("name")}

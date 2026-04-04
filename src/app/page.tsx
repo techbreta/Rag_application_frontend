@@ -24,6 +24,7 @@ import {
   ArrowRight,
   Globe,
 } from "lucide-react";
+import { Metadata } from "next";
 
 const features = [
   {
@@ -90,6 +91,24 @@ const steps = [
       "Receive accurate answers with source citations so you can verify the information.",
   },
 ];
+export const metadata: Metadata = {
+  title: "RagAI - Chat with Your Documents",
+  description:
+    "Upload your documents and chat with them using AI. Get instant, accurate answers grounded in your actual documents.",
+  icons: {
+    icon: "/icon.png",
+  },
+  keywords:
+    "RAG, Retrieval-Augmented Generation, AI chat, document chat, knowledge graph, vector search, semantic search, question answering, AI assistant, document understanding, natural language processing, machine learning, artificial intelligence,RagAI,RagAI",
+  openGraph: {
+    title: "RagAI - Chat with Your Documents",
+    description:
+      "Upload your documents and chat with them using AI. Get instant, accurate answers grounded in your actual documents.",
+    url: "https://ragai.website",
+    type: "website",
+  },
+  
+};
 
 export default function Home() {
   return (

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: "Features | RagAI",
     description:
       "Explore RagAI's powerful features for document intelligence and Q&A",
-    url: "https://rag-ai.example.com/features",
+    url: "https://ragai.website/features",
     type: "website",
   },
 };

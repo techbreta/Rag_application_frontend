@@ -15,14 +15,14 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "RagAI - Chat with Your Documents",
-  description:
-    "Upload your documents and chat with them using AI. Get instant, accurate answers grounded in your actual documents.",
-  icons: {
-    icon: "/icon.png",
+  title: {
+    default: "",
+    template: "%s - Rag AI | RagAI",
   },
-  keywords:
-    "RAG, Retrieval-Augmented Generation, AI chat, document chat, knowledge graph, vector search, semantic search, question answering, AI assistant, document understanding, natural language processing, machine learning, artificial intelligence,RagAI,RagAI",
+  authors: [{ name: "TechBreta Team", url: "https://ragai.website" }],
+  creator: "TechBreta | Talha Riaz",
+  publisher: "TechBreta | Talha Riaz",
+  category: "AI, RAG, Document Intelligence, Document Chat, Knowledge Graph, Vector Search, Semantic Search, Question Answering, AI Assistant, Document Understanding, Natural Language Processing, Machine Learning, Artificial Intelligence,Image Editor, Background Remover, Free Images, Document Converter",
 };
 
 export default function RootLayout({

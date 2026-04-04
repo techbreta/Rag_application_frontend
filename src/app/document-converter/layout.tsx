@@ -12,6 +12,10 @@ export const metadata: Metadata = {
     title: "Document Converter — RagAi",
     description:
       "Convert documents between 16+ formats instantly. Upload, pick a format, download. Free and private.",
+    url: "https://ragai.website/document-converter",
+    siteName: "RagAi",
+    locale: "en_US",
+    type: "website",
   },
 };
 

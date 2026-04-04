@@ -5,6 +5,14 @@ export const metadata: Metadata = {
   description:
     "Search and download high-quality AI-generated images using natural language prompts.",
   keywords: "free images, image search, AI images, download images,RagAI,RagAI",
+  openGraph: {
+    title: "Free Images - RagAI",
+    description:
+      "Search and download high-quality AI-generated images using natural language prompts.",
+    url: "https://ragai.website/free-images",
+    type: "website",
+  },
+
 };
 
 export default function FreeImagesLayout({

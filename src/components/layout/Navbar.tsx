@@ -73,6 +73,12 @@ export default function Navbar() {
             >
               Doc Converter
             </Link>
+            <Link
+              href="/blog"
+              className="text-sm text-slate-400 hover:text-white transition-colors font-medium text-violet-300 hover:text-violet-200"
+            >
+              Blog
+            </Link>
 
             {isAuthenticated ? (
               <Link href="/dashboard">
@@ -153,6 +159,13 @@ export default function Navbar() {
               onClick={() => setMobileOpen(false)}
             >
               Doc Converter
+            </Link>
+            <Link
+              href="/blog"
+              className="block text-sm text-violet-400 hover:text-white py-2 font-medium"
+              onClick={() => setMobileOpen(false)}
+            >
+              Blog
             </Link>
             {isAuthenticated ? (
               <Link href="/dashboard" onClick={() => setMobileOpen(false)}>

@@ -2,11 +2,13 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
+  className?: string;
   children: React.ReactNode;
 }
 
@@ -14,6 +16,7 @@ export default function Modal({
   isOpen,
   onClose,
   title,
+  className,
   children,
 }: ModalProps) {
   return (
@@ -32,9 +35,14 @@ export default function Modal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
           >
-            <div className="w-full max-w-lg rounded-2xl border border-slate-700 bg-slate-900 p-6 shadow-2xl">
+            <div
+              className={cn(
+                "w-full max-w-lg rounded-2xl border border-slate-700 bg-slate-900 p-6 shadow-2xl my-8",
+                className
+              )}
+            >
               <div className="flex items-center justify-between mb-4">
                 {title && (
                   <h3 className="text-lg font-semibold text-white">{title}</h3>

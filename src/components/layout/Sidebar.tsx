@@ -21,6 +21,7 @@ import {
   Users,
   Files,
   MessagesSquare,
+  BookOpen,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
@@ -44,6 +45,7 @@ const adminNavItems = [
   { href: "/dashboard/admin/documents", label: "All Documents", icon: Files },
   { href: "/dashboard/admin/chats", label: "All Chats", icon: MessagesSquare },
   { href: "/dashboard/admin/images", label: "All Images", icon: ImageIcon },
+  { href: "/dashboard/admin/blogs", label: "Manage Blogs", icon: BookOpen },
 ];
 
 export default function Sidebar() {

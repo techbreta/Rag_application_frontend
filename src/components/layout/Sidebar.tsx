@@ -43,6 +43,7 @@ const adminNavItems = [
   { href: "/dashboard/admin/users", label: "All Users", icon: Users },
   { href: "/dashboard/admin/documents", label: "All Documents", icon: Files },
   { href: "/dashboard/admin/chats", label: "All Chats", icon: MessagesSquare },
+  { href: "/dashboard/admin/images", label: "All Images", icon: ImageIcon },
 ];
 
 export default function Sidebar() {

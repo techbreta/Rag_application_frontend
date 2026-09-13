@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Link from "next/link";
-import { ShieldAlert, ShieldCheck, Users, Files, MessagesSquare, LayoutDashboard } from "lucide-react";
+import { ShieldAlert, ShieldCheck, Users, Files, MessagesSquare, LayoutDashboard, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
@@ -12,6 +12,7 @@ const tabs = [
   { href: "/dashboard/admin/users", label: "All Users", icon: Users },
   { href: "/dashboard/admin/documents", label: "All Documents", icon: Files },
   { href: "/dashboard/admin/chats", label: "All Chats", icon: MessagesSquare },
+  { href: "/dashboard/admin/images", label: "All Images", icon: ImageIcon },
 ];
 
 export default function AdminLayout({

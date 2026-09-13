@@ -11,6 +11,7 @@ import {
   MessageCircle,
   ArrowUpRight,
   ExternalLink,
+  ImageIcon,
 } from "lucide-react";
 import { formatDistanceToNow } from "@/lib/date";
 
@@ -19,6 +20,7 @@ interface AdminStats {
   totalDocuments: number;
   totalChats: number;
   totalMessages: number;
+  totalImages?: number;
   newUsersToday: number;
   newUsersThisWeek: number;
   recentUsers: any[];
@@ -113,6 +115,16 @@ export default function AdminOverviewPage() {
       href: "/dashboard/admin/chats",
     },
     {
+      title: "AI Generated Images",
+      value: stats.totalImages || 0,
+      subValue: "User created graphics",
+      icon: ImageIcon,
+      color: "from-amber-500/20 to-orange-500/20",
+      textColor: "text-amber-400",
+      borderColor: "border-amber-500/30",
+      href: "/dashboard/admin/images",
+    },
+    {
       title: "Total Messages Exchanged",
       value: stats.totalMessages,
       subValue: "Queries & AI responses",
@@ -126,8 +138,8 @@ export default function AdminOverviewPage() {
 
   return (
     <div className="space-y-6">
-      {/* 4 Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* 5 Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {statCards.map((card) => (
           <Link key={card.title} href={card.href} className="block group">
             <div

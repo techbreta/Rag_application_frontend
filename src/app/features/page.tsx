@@ -1,329 +1,263 @@
-// "use client";
-
 import Link from "next/link";
-// import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import Button from "@/components/ui/Button";
 import {
   FadeIn,
+  SlideIn,
   StaggerContainer,
   StaggerItem,
-  GlowingOrb,
 } from "@/components/layout/AnimatedPage";
 import {
-  Upload,
-  Brain,
   Search,
-  Shield,
-  Zap,
-  Globe,
+  Sparkles,
   FileText,
-  MessageSquare,
-  Layers,
-  Lock,
-  BarChart3,
-  RefreshCw,
-  ImageIcon,
-  Edit,
+  Shield,
   ArrowRight,
-  FileOutput,
+  Database,
+  Cpu,
+  Layers,
+  Scissors,
+  Check,
+  Building2,
+  FileCode,
+  Lock,
 } from "lucide-react";
 
-const mainFeatures = [
-  {
-    icon: Upload,
-    title: "Upload Documents",
-    description:
-      "Upload PDFs, DOCX, and TXT files. We process and index them for lightning-fast retrieval.",
-    details: [
-      "Drag & drop file upload",
-      "Support for PDF, DOCX, and TXT formats",
-      "Automatic text extraction & chunking",
-      "Real-time processing status",
-    ],
-    color: "from-violet-500 to-purple-600",
-  },
-  {
-    icon: Brain,
-    title: "AI-Powered Chat",
-    description:
-      "Ask questions about your documents and get accurate, context-aware answers instantly.",
-    details: [
-      "Natural language understanding",
-      "Context-aware responses",
-      "Source citations with every answer",
-      "Conversation history & continuity",
-    ],
-    color: "from-indigo-500 to-blue-600",
-  },
-  {
-    icon: Search,
-    title: "Smart Vector Search",
-    description:
-      "Our vector search finds the most relevant content across all your documents.",
-    details: [
-      "Semantic similarity matching",
-      "Cross-document search",
-      "Relevance scoring",
-      "Chunk-level precision",
-    ],
-    color: "from-cyan-500 to-teal-600",
-  },
-  {
-    icon: Shield,
-    title: "Secure & Private",
-    description:
-      "Your documents are encrypted and only accessible by you. We never share your data.",
-    details: [
-      "JWT-based authentication",
-      "Per-user data isolation",
-      "Secure file storage on Cloudinary",
-      "Token-based session management",
-    ],
-    color: "from-emerald-500 to-green-600",
-  },
-  {
-    icon: Zap,
-    title: "Lightning Fast",
-    description:
-      "Get responses in seconds, not minutes. Our optimized pipeline ensures speed.",
-    details: [
-      "Optimized vector embeddings",
-      "Fast document processing",
-      "Efficient chunk retrieval",
-      "Minimal response latency",
-    ],
-    color: "from-amber-500 to-orange-600",
-  },
-  {
-    icon: Globe,
-    title: "Multi-Document Chat",
-    description:
-      "Chat with a single document, multiple documents, or your entire library at once.",
-    details: [
-      "Single document mode",
-      "Multi-document selection",
-      "All documents mode",
-      "Flexible chat types",
-    ],
-    color: "from-pink-500 to-rose-600",
-  },
-];
+export const metadata = {
+  title: "Enterprise Architecture & Features | RagAI",
+  description:
+    "Explore RagAI's technical architecture: multi-document vector recall, optical layout normalizer, neural matting studio, and zero-retention compliance governance.",
+};
 
-const additionalFeatures = [
+const capabilities = [
   {
-    icon: ImageIcon,
-    title: "Free Images",
-    description:
-      "Browse and download a curated gallery of free AI-generated images.",
-    href: "/free-images",
+    category: "Retrieval & Vector Architecture",
+    icon: Search,
+    color: "from-violet-600 to-indigo-600",
+    features: [
+      {
+        title: "Multi-Hop Cross-Corpus Synthesis",
+        description:
+          "Synthesize disparate insights across 50+ mixed files (PDF, DOCX, XLSX, TXT) simultaneously with unified semantic and lexical ranking.",
+      },
+      {
+        title: "Exact Paragraph & Table Citations",
+        description:
+          "Every statement is anchored with interactive source citations including exact page number, section heading, and coordinate highlights.",
+      },
+      {
+        title: "Dynamic Chunk Boundary Normalization",
+        description:
+          "Context-aware semantic boundaries avoid fragmented clauses, guaranteeing coherent vector embeddings for complex domain terminology.",
+      },
+      {
+        title: "Hybrid Dense + Sparse Search Indexing",
+        description:
+          "Combines dense vector cosine embeddings with BM25 lexical keyword matching for sub-15ms lookup speeds across large document vaults.",
+      },
+    ],
   },
   {
-    icon: Edit,
-    title: "Image Editor",
-    description: "Quickly edit and enhance images using our in-browser editor.",
-    href: "/image-editor",
-  },
-  {
-    icon: FileOutput,
-    title: "Document Converter",
-    description:
-      "Convert documents between 16+ formats — PDF, DOCX, XLSX, PPTX, HTML, and more.",
-    href: "/document-converter",
-  },
-  {
+    category: "Document Intelligence & OCR Extraction",
     icon: FileText,
-    title: "Document Management",
-    description:
-      "Organize, view, and manage all your uploaded documents in one place.",
+    color: "from-indigo-600 to-blue-600",
+    features: [
+      {
+        title: "Optical Layout Analysis",
+        description:
+          "Deep layout models identify multi-column flows, headers, footnotes, and embedded graphics to preserve original document hierarchy.",
+      },
+      {
+        title: "Cell-Level Financial Table Normalization",
+        description:
+          "Extracts complex nested tables and spreadsheet balances into clean Markdown and structured JSON without scrambled numbers.",
+      },
+      {
+        title: "Universal Document Format Converter",
+        description:
+          "Converts between PDF, DOCX, XLSX, PPTX, HTML, PNG, and 16+ formats in ephemeral server memory with zero data persistence.",
+      },
+      {
+        title: "Embedded Chart & Diagram Transcription",
+        description:
+          "Translates infographics, organizational structures, and workflow charts into indexed textual knowledge.",
+      },
+    ],
   },
   {
-    icon: MessageSquare,
-    title: "Chat History",
-    description:
-      "Access all your previous conversations and continue where you left off.",
+    category: "Creative Media & Neural Vision Studio",
+    icon: Sparkles,
+    color: "from-purple-600 to-pink-600",
+    features: [
+      {
+        title: "Neural Background Matting",
+        description:
+          "State-of-the-art alpha boundary estimation cuts hair, glass transparencies, and product silhouettes in milliseconds with zero haloing.",
+      },
+      {
+        title: "Studio Diffusion Generation",
+        description:
+          "High-resolution AI image generation from natural language prompts. Download royalty-free commercial assets directly to your workflow.",
+      },
+      {
+        title: "Client-Side Visual Canvas Editor",
+        description:
+          "Crop, annotate, apply filters, and watermark high-res visuals client-side without sending unneeded data back to external servers.",
+      },
+      {
+        title: "Free Commercial Stock Asset Library",
+        description:
+          "Search thousands of pre-generated high-fidelity commercial imagery using natural language prompts and instant downloads.",
+      },
+    ],
   },
   {
-    icon: Layers,
-    title: "Source Citations",
-    description:
-      "Every answer comes with source references so you can verify information.",
-  },
-  {
-    icon: Lock,
-    title: "User Authentication",
-    description:
-      "Secure login, registration, and email verification for your account.",
-  },
-  {
-    icon: BarChart3,
-    title: "Dashboard Analytics",
-    description:
-      "See your document count, chat sessions, and usage at a glance.",
-  },
-  {
-    icon: RefreshCw,
-    title: "Real-time Processing",
-    description:
-      "Documents are processed and indexed automatically after upload.",
+    category: "Enterprise Security & Governance",
+    icon: Shield,
+    color: "from-emerald-600 to-teal-600",
+    features: [
+      {
+        title: "Strict Zero Data Retention SLA",
+        description:
+          "Your confidential uploads and prompt queries are never used to train or adjust foundation model weights.",
+      },
+      {
+        title: "SOC-2 Type II & HIPAA Readiness",
+        description:
+          "End-to-end TLS 1.3 encryption in transit, AES-256 encryption at rest, and optional dedicated VPC deployment options.",
+      },
+      {
+        title: "Granular Role-Based Access Control (RBAC)",
+        description:
+          "Control access by organization, team, or document collection with Admin, Editor, and Viewer permission tiers.",
+      },
+      {
+        title: "Comprehensive Audit Logging",
+        description:
+          "Exportable immutable access logs for legal compliance, regulatory oversight, and security posture monitoring.",
+      },
+    ],
   },
 ];
 
 export default function FeaturesPage() {
   return (
-    <main className="min-h-screen bg-slate-950 text-white overflow-hidden">
+    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-violet-600 selection:text-white flex flex-col">
       <Navbar />
 
-      {/* Hero */}
-      <section className="relative pt-32 pb-16 px-4">
-        <GlowingOrb className="top-20 left-1/3 bg-violet-500" />
-        <GlowingOrb className="top-40 right-1/3 bg-indigo-600" />
-
-        <div className="relative max-w-4xl mx-auto text-center">
+      <main className="flex-1 pt-28 pb-20">
+        {/* Header Section */}
+        <section className="relative px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pt-6 pb-16 text-center">
           <FadeIn>
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm font-medium mb-6">
-              <Zap className="h-4 w-4" />
-              Powerful Features
-            </span>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Everything you need to{" "}
-              <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                chat with your docs
-              </span>
-            </h1>
-          </FadeIn>
-          <FadeIn delay={0.2}>
-            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-              RagAI combines document processing, vector search, and AI chat to
-              give you instant answers from your documents with full source
-              citations.
-            </p>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* Main Features */}
-      <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {mainFeatures.map((feature, i) => (
-              <StaggerItem key={i}>
-                <div
-                  // whileHover={{ y: -5 }}
-                  className="relative rounded-2xl border border-slate-800 bg-slate-900/50 p-6 h-full backdrop-blur-sm hover:border-violet-500/30 transition-colors"
-                >
-                  <div
-                    className={`rounded-xl bg-gradient-to-br ${feature.color} p-3 w-fit mb-4 shadow-lg`}
-                  >
-                    <feature.icon className="h-6 w-6 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm text-slate-400 mb-4">
-                    {feature.description}
-                  </p>
-                  <ul className="space-y-2">
-                    {feature.details.map((detail, di) => (
-                      <li
-                        key={di}
-                        className="flex items-center gap-2 text-sm text-slate-300"
-                      >
-                        <div className="h-1.5 w-1.5 rounded-full bg-violet-400 shrink-0" />
-                        {detail}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
-
-      {/* Additional Features */}
-      <section className="py-20 px-4 border-t border-slate-800/50">
-        <div className="max-w-7xl mx-auto">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                And much more...
-              </h2>
-              <p className="text-slate-400 max-w-xl mx-auto">
-                Additional features that make RagAI the complete document
-                intelligence platform.
-              </p>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-100 border border-violet-200/80 text-violet-700 text-xs font-semibold mb-6">
+              <Cpu className="h-3.5 w-3.5" />
+              Technical Architecture &amp; System Capabilities
             </div>
           </FadeIn>
 
-          <StaggerContainer className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {additionalFeatures.map((feature, i) => (
-              <StaggerItem key={i}>
-                {feature.href ? (
-                  <Link href={feature.href} className="block">
-                    <div className="flex items-start gap-4 rounded-xl border border-slate-800 bg-slate-900/30 p-5 hover:border-slate-700 transition-colors">
-                      <div className="rounded-lg bg-violet-500/10 p-2.5 shrink-0">
-                        <feature.icon className="h-5 w-5 text-violet-400" />
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-semibold text-white mb-1">
-                          {feature.title}
-                        </h3>
-                        <p className="text-xs text-slate-400">
-                          {feature.description}
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                ) : (
-                  <div className="flex items-start gap-4 rounded-xl border border-slate-800 bg-slate-900/30 p-5 hover:border-slate-700 transition-colors">
-                    <div className="rounded-lg bg-violet-500/10 p-2.5 shrink-0">
-                      <feature.icon className="h-5 w-5 text-violet-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-white mb-1">
-                        {feature.title}
-                      </h3>
-                      <p className="text-xs text-slate-400">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
+          <FadeIn delay={0.1}>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight max-w-4xl mx-auto">
+              Built for precision, security, and{" "}
+              <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                absolute truth
+              </span>
+            </h1>
+          </FadeIn>
 
-      {/* CTA */}
-      <section className="py-20 px-4">
-        <FadeIn>
-          <div className="max-w-3xl mx-auto text-center rounded-3xl border border-slate-800 bg-gradient-to-br from-violet-600/10 to-indigo-600/10 p-12">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Ready to get started?
-            </h2>
-            <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-              Upload your first document and start chatting with your knowledge
-              base in minutes.
+          <FadeIn delay={0.2}>
+            <p className="mt-5 text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              Explore the engineering pillars behind RagAI&apos;s hallucination-free retrieval engine, document layout parser, and neural media tools.
             </p>
-            <Link href="/register">
-              <Button>
-                Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-        </FadeIn>
-      </section>
+          </FadeIn>
+        </section>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800/50 py-8 px-4">
-        <div className="max-w-7xl mx-auto text-center text-sm text-slate-500">
-          © {new Date().getFullYear()} RagAI. All rights reserved.
-        </div>
-      </footer>
-    </main>
+        {/* Feature Pillars Grid */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 pb-20">
+          {capabilities.map((cat, idx) => (
+            <div key={cat.category} className="space-y-6">
+              <div className="flex items-center gap-3 border-b border-slate-200 pb-4">
+                <div className={`p-2.5 rounded-xl bg-gradient-to-br ${cat.color} text-white shadow-sm`}>
+                  <cat.icon className="h-5 w-5" />
+                </div>
+                <h2 className="text-2xl font-bold text-slate-900">{cat.category}</h2>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {cat.features.map((feat, fi) => (
+                  <div
+                    key={fi}
+                    className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs hover:border-violet-300 hover:shadow-md transition-all"
+                  >
+                    <h3 className="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-violet-600 shrink-0" />
+                      {feat.title}
+                    </h3>
+                    <p className="text-slate-600 text-sm leading-relaxed pl-3.5">
+                      {feat.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </section>
+
+        {/* Enterprise Security Banner */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-3xl p-8 sm:p-12 shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="space-y-2 text-center md:text-left max-w-2xl">
+              <span className="inline-flex items-center gap-1.5 text-violet-400 font-bold text-xs uppercase tracking-wider">
+                <Shield className="h-4 w-4" /> Enterprise Security Protocol
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                Require custom on-premise VPC vectorization or dedicated SLAs?
+              </h3>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                We work directly with enterprise procurement officers, legal general counsels, and IT security teams to provide tailored BAAs, pen-test certifications, and isolated VPC deployments.
+              </p>
+            </div>
+            <div className="shrink-0 flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+              <Link href="/register" className="w-full sm:w-auto">
+                <Button className="w-full justify-center bg-violet-600 hover:bg-violet-700 text-white shadow-lg shadow-violet-600/30 font-semibold px-6 py-3 rounded-xl text-sm">
+                  Talk to Security Team
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Pre-Footer Call to Action */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="rounded-3xl border border-violet-100 bg-gradient-to-br from-violet-600 via-indigo-600 to-purple-700 p-10 sm:p-14 text-center text-white shadow-2xl relative overflow-hidden">
+            <div className="relative z-10 max-w-3xl mx-auto space-y-6">
+              <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+                Experience Verified Knowledge Retrieval Today
+              </h2>
+              <p className="text-base sm:text-lg text-violet-100 leading-relaxed max-w-xl mx-auto">
+                No credit card required. Upload your first documents and experience hallucination-free AI answers in under 60 seconds.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+                <Link href="/register" className="w-full sm:w-auto">
+                  <Button className="w-full justify-center bg-white text-violet-900 hover:bg-slate-100 font-bold px-8 py-3.5 rounded-xl shadow-lg text-sm">
+                    Start Free Trial <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/pricing" className="w-full sm:w-auto">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-center border-white/40 text-white hover:bg-white/10 font-semibold px-6 py-3.5 rounded-xl text-sm"
+                  >
+                    View Pricing Plans
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
   );
 }

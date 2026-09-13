@@ -4,13 +4,13 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import { ensureCloudinaryHttps } from "@/lib/cloudinary";
 import { createPromptSlug, extractIdFromSlug } from "@/lib/slug";
 import ImageDetailActions from "./ImageDetailActions";
 import {
   ChevronLeft,
   Sparkles,
-  Download,
   Calendar,
   Layers,
   Cpu,
@@ -69,7 +69,6 @@ const getImageData = cache(async (slug: string): Promise<ImageDetailData | null>
   }
 
   // 2. Fallback: Search across multiple pages to locate image by ID
-  //    Extract prompt words from slug for a more targeted search
   const slugPrompt = slug
     .replace(/-?[0-9a-fA-F]{24}$/, "")
     .replace(/-/g, " ")
@@ -89,7 +88,7 @@ const getImageData = cache(async (slug: string): Promise<ImageDetailData | null>
 
       const searchData = await searchRes.json();
       const images: ImageResult[] = searchData?.data?.data || [];
-      if (images.length === 0) break; // no more pages
+      if (images.length === 0) break;
 
       const found = images.find((img) => img._id === imageId);
 
@@ -101,7 +100,6 @@ const getImageData = cache(async (slug: string): Promise<ImageDetailData | null>
         };
       }
 
-      // If the backend tells us there's no next page, stop
       const hasNextPage = searchData?.data?.pagination?.hasNextPage;
       if (hasNextPage === false) break;
     } catch {
@@ -112,56 +110,38 @@ const getImageData = cache(async (slug: string): Promise<ImageDetailData | null>
   return null;
 });
 
-type Props = {
-  params: { slug: string } | Promise<{ slug: string }>;
-};
-
-export async function generateMetadata(props: Props): Promise<Metadata> {
-  const resolvedParams = await Promise.resolve(props.params);
-  const data = await getImageData(resolvedParams.slug);
-
-  if (!data || !data.image) {
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  const data = await getImageData(params.slug);
+  if (!data?.image) {
     return {
-      title: "Image Not Found | RagAI",
-      description: "The requested image could not be found.",
+      title: "Image Not Found | RagAI Free AI Images",
+      description: "The requested AI generated image could not be located.",
     };
   }
 
   const { image } = data;
-  const titlePrompt =
-    image.prompt.length > 55
-      ? `${image.prompt.slice(0, 52)}...`
+  const promptSnippet =
+    image.prompt.length > 70
+      ? `${image.prompt.slice(0, 67)}...`
       : image.prompt;
-  const pageTitle = `${titlePrompt} - Free AI Image | RagAI`;
-  const pageDescription = `Download high-resolution free AI generated image: "${image.prompt}". Free to download and use on RagAI.`;
-  const canonicalUrl = `https://ragai.website/free-images/${resolvedParams.slug}`;
-  const safeImgUrl = ensureCloudinaryHttps(image.cloudinaryUrl);
-
-  const keywords = [
-    "free AI images",
-    "AI generated photo",
-    "free stock images",
-    "download AI image",
-    "RagAI",
-    ...image.prompt.split(/[\s,]+/).filter((w) => w.length > 3).slice(0, 8),
-  ];
+  const title = `${promptSnippet} | Free AI Image`;
+  const description = `Free high-resolution AI generated image: "${image.prompt}". Download full resolution, edit with neural tools, or use royalty-free commercially.`;
+  const imageUrl = ensureCloudinaryHttps(image.cloudinaryUrl);
 
   return {
-    title: pageTitle,
-    description: pageDescription,
-    keywords: keywords.join(", "),
-    alternates: {
-      canonical: canonicalUrl,
-    },
+    title,
+    description,
     openGraph: {
-      title: pageTitle,
-      description: pageDescription,
-      url: canonicalUrl,
-      siteName: "RagAI",
-      type: "article",
+      title,
+      description,
+      type: "website",
       images: [
         {
-          url: safeImgUrl,
+          url: imageUrl,
           width: 1024,
           height: 1024,
           alt: image.prompt,
@@ -170,325 +150,236 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: pageTitle,
-      description: pageDescription,
-      images: [safeImgUrl],
+      title,
+      description,
+      images: [imageUrl],
     },
   };
 }
 
-export default async function ImageDetailPage(props: Props) {
-  const resolvedParams = await Promise.resolve(props.params);
-  const data = await getImageData(resolvedParams.slug);
+export default async function ImageDetailPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const data = await getImageData(params.slug);
 
-  if (!data || !data.image) {
+  if (!data?.image) {
     notFound();
   }
 
   const { image, relatedImages } = data;
-  const safeImgUrl = ensureCloudinaryHttps(image.cloudinaryUrl);
-  const canonicalUrl = `https://ragai.website/free-images/${resolvedParams.slug}`;
+  const imageUrl = ensureCloudinaryHttps(image.cloudinaryUrl);
 
-  // Structured Data (JSON-LD) for Google Image Search and SEO ranking
-  const jsonLd = [
-    {
-      "@context": "https://schema.org",
-      "@type": "ImageObject",
-      name: image.prompt,
-      caption: image.prompt,
-      description: image.prompt,
-      contentUrl: safeImgUrl,
-      thumbnailUrl: safeImgUrl,
-      datePublished: image.createdAt,
-      uploadDate: image.createdAt,
-      acquireLicensePage: "https://ragai.website/free-images",
-      license: "https://creativecommons.org/publicdomain/zero/1.0/",
-      author: {
-        "@type": "Organization",
-        name: "RagAI",
-        url: "https://ragai.website",
-      },
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: "https://ragai.website",
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Free Images",
-          item: "https://ragai.website/free-images",
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: image.prompt.slice(0, 40),
-          item: canonicalUrl,
-        },
-      ],
-    },
-  ];
+  const formattedDate = image.createdAt
+    ? new Date(image.createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : "Recently generated";
 
-  const formattedDate = new Date(image.createdAt).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  // Derive simple tags from prompt
+  const tags = image.prompt
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "")
+    .split(/\s+/)
+    .filter((w) => w.length > 3)
+    .slice(0, 8);
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white selection:bg-violet-500/30">
-      {/* Inject Structured Data for Search Engines */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-
+    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-violet-600 selection:text-white flex flex-col">
       <Navbar />
 
-      <div className="pt-28 sm:pt-32 md:pt-36 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        {/* Navigation Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs text-slate-400 mb-6 sm:mb-8"
-        >
-          <Link
-            href="/free-images"
-            className="inline-flex items-center gap-1 hover:text-violet-400 transition-colors font-medium"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            <span>Gallery</span>
-          </Link>
-          <span className="text-slate-600">/</span>
-          <span className="text-slate-400 font-medium">Free Image</span>
-          <span className="text-slate-600">/</span>
-          <span className="text-slate-500 line-clamp-1 max-w-[180px] sm:max-w-xs md:max-w-md">
-            {image.prompt}
-          </span>
-        </nav>
+      <main className="flex-1 pt-28 pb-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumbs */}
+          <nav className="mb-6">
+            <Link
+              href="/free-images"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-violet-600 transition-colors"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span>Back to Free AI Images Directory</span>
+            </Link>
+          </nav>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 items-start">
-          {/* Left Column: Image Preview Card */}
-          <div className="lg:col-span-7 xl:col-span-8 w-full">
-            <div className="relative rounded-2xl sm:rounded-3xl border border-slate-800/80 bg-slate-900/60 overflow-hidden shadow-2xl backdrop-blur-xl">
-              {/* Ambient Blurred Backdrop for atmospheric aesthetics */}
-              <div
-                className="absolute inset-0 overflow-hidden opacity-25 filter blur-3xl pointer-events-none scale-110"
-                aria-hidden="true"
-              >
-                <Image
-                  src={safeImgUrl}
-                  alt=""
-                  fill
-                  className="object-cover"
-                />
-              </div>
-
-              {/* Viewport-adaptive image display area */}
-              <div className="relative w-full h-[45vh] sm:h-[55vh] md:h-[65vh] lg:h-[72vh] min-h-[300px] sm:min-h-[420px] max-h-[780px] p-2 sm:p-4 flex items-center justify-center bg-slate-950/40">
-                <Image
-                  src={safeImgUrl}
-                  alt={image.prompt}
-                  fill
-                  priority
-                  className="object-contain p-2 sm:p-4"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 60vw, 55vw"
-                />
-
-                {/* Resolution & Format Pill */}
-                <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-slate-950/80 border border-slate-700/60 backdrop-blur-md text-[10px] sm:text-[11px] text-slate-300 font-mono shadow-md">
-                  <ImageIcon className="h-3 sm:h-3.5 w-3 sm:w-3.5 text-violet-400 shrink-0" />
-                  <span>High Resolution AI Image</span>
+          {/* Main Grid: Visual Media Container + Specification Panel */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+            {/* Left: Image Canvas */}
+            <div className="lg:col-span-7 space-y-4">
+              <div className="relative rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-lg p-2 sm:p-3">
+                <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-slate-100">
+                  <Image
+                    src={imageUrl}
+                    alt={image.prompt}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 58vw"
+                    className="object-cover transition-transform duration-500 hover:scale-[1.02]"
+                  />
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Right Column: Prompt, Actions, Details (Sticky on Desktop) */}
-          <div className="lg:col-span-5 xl:col-span-4 w-full space-y-5 sm:space-y-6 lg:sticky lg:top-28 self-start">
-            {/* Prompt Card */}
-            <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl space-y-4">
-              <div className="flex items-center justify-between gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-semibold">
-                  <Sparkles className="h-3 w-3 shrink-0" />
-                  Image Prompt
+              {/* Resolution & Attribution Badge */}
+              <div className="flex items-center justify-between px-3 py-2 rounded-2xl bg-white border border-slate-200 text-xs text-slate-500">
+                <span className="inline-flex items-center gap-1.5 font-medium">
+                  <ImageIcon className="h-3.5 w-3.5 text-violet-600" />
+                  1024 × 1024 HD Lossless PNG
                 </span>
-
-                <span className="text-xs text-slate-500 flex items-center gap-1 shrink-0">
-                  <Calendar className="h-3.5 w-3.5" />
-                  {formattedDate}
+                <span className="inline-flex items-center gap-1 text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  CC0 Commercial License
                 </span>
               </div>
+            </div>
 
-              <h1 className="text-base sm:text-lg lg:text-xl font-medium text-slate-100 leading-relaxed break-words">
-                {image.prompt}
-              </h1>
+            {/* Right: Metadata & Action Column */}
+            <div className="lg:col-span-5 space-y-6">
+              {/* Header */}
+              <div className="space-y-3">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-violet-50 text-violet-700 border border-violet-200">
+                  <Sparkles className="h-3.5 w-3.5 text-violet-600" />
+                  AI Studio Generation
+                </span>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
+                  {image.prompt}
+                </h1>
+              </div>
 
-              {/* Interactive Client Actions */}
-              <div className="pt-1">
+              {/* Actions Box */}
+              <div className="rounded-3xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
                 <ImageDetailActions
                   prompt={image.prompt}
-                  cloudinaryUrl={image.cloudinaryUrl}
-                  slug={resolvedParams.slug}
+                  cloudinaryUrl={imageUrl}
+                  slug={params.slug}
                 />
               </div>
-            </div>
 
-            {/* Specifications & License Card */}
-            <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl space-y-4">
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                Image Information
-              </h2>
-
-              <div className="divide-y divide-slate-800/80 text-sm">
-                <div className="py-2.5 flex items-center justify-between gap-2">
-                  <span className="text-slate-400 flex items-center gap-2 text-xs shrink-0">
-                    <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0" />
-                    License
-                  </span>
-                  <span className="font-medium text-[11px] sm:text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 truncate">
-                    Free for Commercial Use
-                  </span>
-                </div>
-
-                {image.metadata?.model && (
-                  <div className="py-2.5 flex items-center justify-between gap-2">
-                    <span className="text-slate-400 flex items-center gap-2 text-xs shrink-0">
-                      <Cpu className="h-4 w-4 text-violet-400 shrink-0" />
-                      AI Model
-                    </span>
-                    <span className="font-mono text-xs text-slate-200 truncate">
-                      {image.metadata.model}
-                    </span>
+              {/* Technical Specifications */}
+              <div className="rounded-3xl bg-white border border-slate-200 p-5 sm:p-6 space-y-4 shadow-sm">
+                <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Asset Specifications
+                </h2>
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                    <div className="flex items-center gap-1.5 text-slate-500 mb-1">
+                      <Cpu className="h-3.5 w-3.5 text-violet-600" />
+                      <span>Model Architecture</span>
+                    </div>
+                    <p className="font-bold text-slate-800 truncate">
+                      {image.metadata?.model || "SDXL Neural Diffusion"}
+                    </p>
                   </div>
-                )}
 
-                {image.metadata?.generationTime && (
-                  <div className="py-2.5 flex items-center justify-between gap-2">
-                    <span className="text-slate-400 flex items-center gap-2 text-xs shrink-0">
-                      <Layers className="h-4 w-4 text-cyan-400 shrink-0" />
-                      Generation Time
-                    </span>
-                    <span className="text-xs text-slate-300">
-                      {(image.metadata.generationTime / 1000).toFixed(1)}s
-                    </span>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                    <div className="flex items-center gap-1.5 text-slate-500 mb-1">
+                      <Calendar className="h-3.5 w-3.5 text-violet-600" />
+                      <span>Generated On</span>
+                    </div>
+                    <p className="font-bold text-slate-800">
+                      {formattedDate}
+                    </p>
                   </div>
-                )}
 
-                <div className="py-2.5 flex items-center justify-between gap-2">
-                  <span className="text-slate-400 flex items-center gap-2 text-xs shrink-0">
-                    <Tag className="h-4 w-4 text-slate-400 shrink-0" />
-                    Attribution
-                  </span>
-                  <span className="text-xs text-slate-300">
-                    Not required
-                  </span>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                    <div className="flex items-center gap-1.5 text-slate-500 mb-1">
+                      <Layers className="h-3.5 w-3.5 text-violet-600" />
+                      <span>Color Profile</span>
+                    </div>
+                    <p className="font-bold text-slate-800">sRGB 8-bit</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                    <div className="flex items-center gap-1.5 text-slate-500 mb-1">
+                      <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                      <span>Commercial Rights</span>
+                    </div>
+                    <p className="font-bold text-emerald-700">Royalty Free</p>
+                  </div>
                 </div>
               </div>
+
+              {/* Tags */}
+              {tags.length > 0 && (
+                <div className="rounded-3xl bg-white border border-slate-200 p-5 shadow-sm">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
+                    <Tag className="h-3.5 w-3.5 text-violet-600" />
+                    <span>Neural Prompt Keywords</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {tags.map((t) => (
+                      <Link
+                        key={t}
+                        href={`/free-images?q=${encodeURIComponent(t)}`}
+                        className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 hover:bg-violet-50 hover:text-violet-700 hover:border-violet-200 transition-colors"
+                      >
+                        #{t}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        </div>
 
-        {/* Related Images Section (For Internal Linking and Crawler Traversal) */}
-        {relatedImages.length > 0 && (
-          <section className="mt-16 sm:mt-24 pt-10 sm:pt-12 border-t border-slate-800/80">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6 sm:mb-8">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-white">More Free AI Images</h2>
-                <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                  Discover more high quality royalty-free generated images
-                </p>
+          {/* Related Images Gallery */}
+          {relatedImages && relatedImages.length > 0 && (
+            <div className="mt-20 border-t border-slate-200 pt-16">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+                    Related AI Generations
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                    Similar conceptual prompts from our high-throughput vector catalog
+                  </p>
+                </div>
+                <Link
+                  href="/free-images"
+                  className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-violet-600 hover:text-violet-700"
+                >
+                  <span>Explore full gallery</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
 
-              <Link
-                href="/free-images"
-                className="inline-flex items-center gap-1.5 text-xs text-violet-400 hover:text-violet-300 font-semibold w-fit"
-              >
-                <span>View all gallery</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                {relatedImages.map((item) => {
+                  const itemUrl = ensureCloudinaryHttps(item.cloudinaryUrl);
+                  const itemSlug = createPromptSlug(item.prompt, item._id);
 
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
-              {relatedImages.map((related) => {
-                const relSlug = createPromptSlug(related.prompt, related._id);
-                const relUrl = `/free-images/${relSlug}`;
-
-                return (
-                  <div
-                    key={related._id}
-                    className="group relative rounded-xl sm:rounded-2xl border border-slate-800 bg-slate-900/50 overflow-hidden hover:border-violet-500/40 transition-all duration-300 flex flex-col"
-                  >
-                    <div className="relative aspect-square w-full overflow-hidden bg-slate-800">
-                      <Link
-                        href={relUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block w-full h-full"
-                      >
+                  return (
+                    <Link
+                      key={item._id}
+                      href={`/free-images/${itemSlug}`}
+                      className="group block rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-violet-300 transition-all duration-300"
+                    >
+                      <div className="relative aspect-square w-full bg-slate-100 overflow-hidden">
                         <Image
-                          src={ensureCloudinaryHttps(related.cloudinaryUrl)}
-                          alt={related.prompt}
+                          src={itemUrl}
+                          alt={item.prompt}
                           fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                      </Link>
-                    </div>
-
-                    <div className="p-2.5 sm:p-3.5 flex flex-col flex-1 justify-between gap-2">
-                      <Link
-                        href={relUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[11px] sm:text-xs text-slate-300 hover:text-violet-400 line-clamp-2 transition-colors font-medium"
-                        title={related.prompt}
-                      >
-                        {related.prompt}
-                      </Link>
-
-                      <div className="flex items-center justify-between pt-1.5 sm:pt-2 border-t border-slate-800/60 mt-auto">
-                        <Link
-                          href={relUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[10px] sm:text-[11px] text-violet-400 hover:text-violet-300 flex items-center gap-1 font-medium"
-                        >
-                          <span>View</span>
-                          <ArrowRight className="h-3 w-3" />
-                        </Link>
-
-                        <a
-                          href={
-                            related.cloudinaryUrl.includes("/upload/")
-                              ? ensureCloudinaryHttps(
-                                  related.cloudinaryUrl,
-                                ).replace("/upload/", "/upload/fl_attachment/")
-                              : ensureCloudinaryHttps(related.cloudinaryUrl)
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-slate-400 hover:text-white p-1 rounded transition-colors"
-                          title="Download"
-                        >
-                          <Download className="h-3.5 w-3.5" />
-                        </a>
                       </div>
-                    </div>
-                  </div>
-                );
-              })}
+                      <div className="p-3">
+                        <p className="text-xs font-semibold text-slate-800 line-clamp-2 leading-snug group-hover:text-violet-600 transition-colors">
+                          {item.prompt}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-          </section>
-        )}
-      </div>
-    </main>
+          )}
+        </div>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
 

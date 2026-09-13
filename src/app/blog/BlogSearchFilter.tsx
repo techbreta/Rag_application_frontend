@@ -81,14 +81,14 @@ export default function BlogSearchFilter({
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search articles on RAG, LLMs, vision AI..."
-            className="w-full pl-11 pr-20 py-3.5 rounded-2xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all text-sm shadow-inner"
+            placeholder="Search articles on RAG, LLMs, vision AI, compliance..."
+            className="w-full pl-11 pr-24 py-3.5 rounded-2xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/25 focus:border-violet-600 transition-all text-sm shadow-xs"
           />
           {searchTerm && (
             <button
               type="button"
               onClick={handleClearSearch}
-              className="absolute right-14 text-slate-400 hover:text-white p-1"
+              className="absolute right-16 text-slate-400 hover:text-slate-600 p-1 transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
@@ -96,7 +96,7 @@ export default function BlogSearchFilter({
           <button
             type="submit"
             disabled={isPending}
-            className="absolute right-2 px-3.5 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold transition-all shadow-md hover:shadow-violet-600/30 disabled:opacity-50"
+            className="absolute right-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold transition-all shadow-sm hover:shadow-md disabled:opacity-50"
           >
             {isPending ? "..." : "Search"}
           </button>
@@ -120,8 +120,8 @@ export default function BlogSearchFilter({
               onClick={() => handleCategoryChange(catName)}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all shrink-0 flex items-center gap-1.5 ${
                 isSelected
-                  ? "bg-violet-600 text-white shadow-lg shadow-violet-600/25 border border-violet-500"
-                  : "bg-slate-900/60 text-slate-400 hover:text-white hover:bg-slate-800/80 border border-slate-800"
+                  ? "bg-violet-600 text-white shadow-md shadow-violet-600/20 border border-violet-600 font-semibold"
+                  : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 border border-slate-200/80 shadow-xs"
               }`}
             >
               <span>{catName}</span>
@@ -129,8 +129,8 @@ export default function BlogSearchFilter({
                 <span
                   className={`text-[10px] px-1.5 py-0.5 rounded-full ${
                     isSelected
-                      ? "bg-white/20 text-white"
-                      : "bg-slate-800 text-slate-400"
+                      ? "bg-white/25 text-white font-bold"
+                      : "bg-slate-100 text-slate-500"
                   }`}
                 >
                   {catCount}
@@ -143,4 +143,3 @@ export default function BlogSearchFilter({
     </div>
   );
 }
-

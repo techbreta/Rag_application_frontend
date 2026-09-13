@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import { ensureCloudinaryHttps } from "@/lib/cloudinary";
 import { Download, Scissors, Upload } from "lucide-react";
 import toast from "react-hot-toast";
@@ -188,31 +189,32 @@ function ImageEditorContent() {
   }, [pendingRemoveBg, imageSrc, isRemovingBg, removeBackground]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col selection:bg-violet-600 selection:text-white">
       <Navbar />
 
       {/* Header */}
-      <div className="mt-16 border-b border-slate-800/50 bg-slate-950/80 backdrop-blur-xl">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div className="pt-28 pb-10 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-violet-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent mb-4">
-              Professional Image Editor
+            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-3">
+              Professional{" "}
+              <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Neural Image Studio
+              </span>
             </h1>
-            <p className="text-slate-400 text-lg max-w-2xl">
-              Edit your images with powerful tools including crop, filters,
-              annotations, stickers, frames, and more — completely free, no
-              watermarks.
+            <p className="text-slate-600 text-base sm:text-lg max-w-2xl leading-relaxed">
+              Edit commercial assets, remove backgrounds with AI matting, fine-tune color curves, and annotate diagrams — client-side with zero retention.
             </p>
           </motion.div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -220,9 +222,9 @@ function ImageEditorContent() {
           className="space-y-8"
         >
           {/* Toolbar */}
-          <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800/50 rounded-2xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-4">
-              Upload Your Image
+          <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
+            <h2 className="text-xl font-bold text-slate-900 mb-4">
+              Select or Upload Image
             </h2>
             <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-wrap">
               <label className="relative cursor-pointer">
@@ -257,7 +259,7 @@ function ImageEditorContent() {
               </button>
 
               {selectedFile && (
-                <p className="text-slate-400 w-full sm:w-auto">
+                <p className="text-slate-500 text-sm w-full sm:w-auto font-medium">
                   Selected: {selectedFile.name}
                 </p>
               )}
@@ -270,7 +272,7 @@ function ImageEditorContent() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
-              className="bg-slate-900/50 backdrop-blur-sm border border-slate-800/50 rounded-2xl overflow-hidden"
+              className="bg-white border border-slate-200/90 rounded-3xl overflow-hidden shadow-lg"
             >
               <div className="h-[600px] md:h-[700px] lg:h-[800px]">
                 <FilerobotImageEditor
@@ -328,6 +330,8 @@ function ImageEditorContent() {
           )}
         </motion.div>
       </div>
+
+      <Footer />
     </div>
   );
 }
@@ -336,8 +340,8 @@ export default function ImageEditorPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-violet-500" />
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-800">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-violet-600" />
         </div>
       }
     >

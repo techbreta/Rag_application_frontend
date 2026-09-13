@@ -13,21 +13,25 @@ export function Providers({ children }: { children: React.ReactNode }) {
           position="top-right"
           toastOptions={{
             style: {
-              background: "#1e293b",
-              color: "#f1f5f9",
-              border: "1px solid #334155",
+              background: "#ffffff",
+              color: "#0f172a",
+              border: "1px solid #e2e8f0",
+              boxShadow:
+                "0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04)",
               borderRadius: "12px",
+              fontSize: "14px",
+              fontWeight: 500,
             },
             success: {
               iconTheme: {
-                primary: "#8b5cf6",
-                secondary: "#f1f5f9",
+                primary: "#7c3aed",
+                secondary: "#ffffff",
               },
             },
             error: {
               iconTheme: {
                 primary: "#ef4444",
-                secondary: "#f1f5f9",
+                secondary: "#ffffff",
               },
             },
           }}
@@ -36,3 +40,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
     </QueryProvider>
   );
 }
+
+export default Providers;
+

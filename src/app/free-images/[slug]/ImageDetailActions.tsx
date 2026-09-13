@@ -52,7 +52,6 @@ export default function ImageDetailActions({
   };
 
   const copyToClipboard = async (text: string): Promise<boolean> => {
-    // Try modern API first
     if (navigator.clipboard?.writeText) {
       try {
         await navigator.clipboard.writeText(text);
@@ -76,7 +75,7 @@ export default function ImageDetailActions({
     const pageUrl =
       typeof window !== "undefined"
         ? window.location.href
-        : `https://ragai.website/free-images/${slug}`;
+        : `https://ragai.techbreta.com/free-images/${slug}`;
 
     // Try Web Share API (mobile / supported browsers)
     if (navigator.share) {
@@ -86,9 +85,9 @@ export default function ImageDetailActions({
           text: prompt,
           url: pageUrl,
         });
-        return; // user shared successfully
+        return;
       } catch {
-        // User cancelled or share failed — fall through to clipboard
+        // fallback to clipboard
       }
     }
 
@@ -102,32 +101,32 @@ export default function ImageDetailActions({
 
   return (
     <div className="space-y-4">
-      {/* Primary Actions: Download (Full-Width Primary) + Actions (Grid) */}
+      {/* Primary Actions: Download + Actions */}
       <div className="space-y-2.5 sm:space-y-3">
         <a
           href={downloadUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-600 text-white shadow-lg shadow-violet-500/20 hover:shadow-violet-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all"
+          className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-600 text-white shadow-md shadow-violet-600/20 hover:shadow-lg hover:shadow-violet-600/30 hover:scale-[1.01] active:scale-[0.99] transition-all"
         >
           <Download className="h-4 w-4" />
-          <span>Download High-Res Image</span>
+          <span>Download High-Resolution Image</span>
         </a>
 
         <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
           <button
             type="button"
             onClick={handleCopyPrompt}
-            className="w-full inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl font-medium text-xs sm:text-sm border border-slate-700 bg-slate-800/70 text-slate-200 hover:bg-slate-700/60 hover:border-slate-600 active:scale-[0.99] transition-all"
+            className="w-full inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl font-medium text-xs sm:text-sm border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 active:scale-[0.99] transition-all shadow-xs"
           >
             {copiedPrompt ? (
               <>
-                <Check className="h-4 w-4 text-emerald-400 shrink-0" />
-                <span className="text-emerald-400 font-semibold truncate">Copied!</span>
+                <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+                <span className="text-emerald-700 font-semibold truncate">Copied!</span>
               </>
             ) : (
               <>
-                <Copy className="h-4 w-4 text-slate-400 shrink-0" />
+                <Copy className="h-4 w-4 text-slate-500 shrink-0" />
                 <span className="truncate">Copy Prompt</span>
               </>
             )}
@@ -136,17 +135,17 @@ export default function ImageDetailActions({
           <button
             type="button"
             onClick={handleShare}
-            className="w-full inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl font-medium text-xs sm:text-sm border border-slate-700 bg-slate-800/70 text-slate-200 hover:bg-slate-700/60 hover:border-slate-600 active:scale-[0.99] transition-all"
+            className="w-full inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl font-medium text-xs sm:text-sm border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 active:scale-[0.99] transition-all shadow-xs"
             title="Share this image page"
           >
             {copiedLink ? (
               <>
-                <Check className="h-4 w-4 text-emerald-400 shrink-0" />
-                <span className="text-emerald-400 font-semibold truncate">Link Copied!</span>
+                <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+                <span className="text-emerald-700 font-semibold truncate">Link Copied!</span>
               </>
             ) : (
               <>
-                <Share2 className="h-4 w-4 text-slate-400 shrink-0" />
+                <Share2 className="h-4 w-4 text-slate-500 shrink-0" />
                 <span className="truncate">Share Image</span>
               </>
             )}
@@ -158,7 +157,7 @@ export default function ImageDetailActions({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
         <Link
           href={`/image-editor?imageUrl=${encodeURIComponent(safeUrl)}`}
-          className="inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-medium border border-violet-500/30 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20 active:scale-[0.99] transition-all text-center"
+          className="inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-semibold border border-violet-200 bg-violet-50 text-violet-700 hover:bg-violet-100 hover:border-violet-300 active:scale-[0.99] transition-all text-center shadow-xs"
         >
           <Sliders className="h-3.5 w-3.5 shrink-0" />
           <span className="truncate">Open in Image Editor</span>
@@ -166,7 +165,7 @@ export default function ImageDetailActions({
 
         <Link
           href={`/image-editor?imageUrl=${encodeURIComponent(safeUrl)}&action=remove-bg`}
-          className="inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-medium border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 active:scale-[0.99] transition-all text-center"
+          className="inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-semibold border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 hover:border-indigo-300 active:scale-[0.99] transition-all text-center shadow-xs"
         >
           <Scissors className="h-3.5 w-3.5 shrink-0" />
           <span className="truncate">Remove Background</span>

@@ -78,14 +78,14 @@ export default function Sidebar() {
         >
           <Menu className="h-5 w-5" />
         </button>
-        <Link href="/" className="ml-3">
+        <Link href="/" className="ml-3 flex items-center">
           <Image
             src="/rag.png"
             alt="RagAI Logo"
-            width={100}
-            height={40}
+            width={120}
+            height={46}
             priority
-            className="h-20 w-auto"
+            className="h-8 w-auto object-contain"
           />
         </Link>
       </div>
@@ -113,16 +113,16 @@ export default function Sidebar() {
       >
         {/* Logo */}
         <div className="flex h-16 items-center justify-between px-4 border-b border-slate-800">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2 overflow-hidden">
             <Image
               src="/rag.png"
               alt="RagAI Logo"
-              width={collapsed ? 40 : 120}
-              height={collapsed ? 40 : 48}
+              width={collapsed ? 36 : 130}
+              height={collapsed ? 36 : 50}
               priority
               className={cn(
                 "transition-all duration-300 object-contain",
-                collapsed ? "h-40" : "h-40 w-auto",
+                collapsed ? "h-8 w-8" : "h-9 w-auto",
               )}
             />
           </Link>

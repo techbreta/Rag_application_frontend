@@ -1,60 +1,63 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { ensureCloudinaryHttps } from "@/lib/cloudinary";
 import { createPromptSlug } from "@/lib/slug";
 import Navbar from "@/components/layout/Navbar";
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
-
+import Footer from "@/components/layout/Footer";
 import {
   FadeIn,
   SlideIn,
   StaggerContainer,
   StaggerItem,
-  GlowingOrb,
 } from "@/components/layout/AnimatedPage";
 import {
   Search,
   Download,
   ImageIcon,
-  Loader2,
   ChevronLeft,
   ChevronRight,
   Sparkles,
+  Sliders,
+  Scissors,
   ArrowRight,
+  ShieldCheck,
   X,
 } from "lucide-react";
-import api from "@/lib/axios";
 
 interface ImageResult {
   _id: string;
   prompt: string;
   cloudinaryUrl: string;
-  vectorSearchScore: number;
+  vectorSearchScore?: number;
   mistralConversationId?: string;
   metadata?: Record<string, any>;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 interface PaginationInfo {
   currentPage: number;
-  pageSize: number;
-  totalCount: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+  pageSize?: number;
+  totalCount?: number;
+  totalPages?: number;
+  hasNextPage?: boolean;
+  hasPreviousPage?: boolean;
 }
 
-interface SearchResponse {
-  status: string;
-  data: {
-    data: ImageResult[];
-    pagination: PaginationInfo;
-  };
-}
+const CATEGORIES = [
+  "All",
+  "Architecture",
+  "Portraits",
+  "Nature",
+  "Futuristic",
+  "Cyberpunk",
+  "Minimalist",
+  "3D Render",
+];
 
 export default function FreeImagesClient({
   initialImages = [],
@@ -65,307 +68,273 @@ export default function FreeImagesClient({
   initialPagination?: PaginationInfo | null;
   query?: string;
 }) {
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState(query);
+
   const images = initialImages || [];
-  const pagination = initialPagination as PaginationInfo | null;
-  const isSearchActive = Boolean(query && query.length > 0);
+  const pagination = initialPagination;
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      router.push(`/free-images?q=${encodeURIComponent(searchTerm.trim())}`);
+    } else {
+      router.push("/free-images");
+    }
+  };
+
+  const handleCategoryClick = (cat: string) => {
+    if (cat === "All") {
+      setSearchTerm("");
+      router.push("/free-images");
+    } else {
+      setSearchTerm(cat);
+      router.push(`/free-images?q=${encodeURIComponent(cat)}`);
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchTerm("");
+    router.push("/free-images");
+  };
+
+  const currentPage = pagination?.currentPage || 1;
+  const totalPages = pagination?.totalPages || 1;
+
+  const goToPage = (p: number) => {
+    const params = new URLSearchParams();
+    if (query) params.set("q", query);
+    params.set("page", String(p));
+    router.push(`/free-images?${params.toString()}`);
+  };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white overflow-hidden">
+    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-violet-600 selection:text-white flex flex-col">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-12 sm:pb-16 px-4">
-        <GlowingOrb className="top-20 left-1/4 bg-violet-500" />
-        <GlowingOrb className="top-40 right-1/4 bg-indigo-600" />
-
-        <div className="relative max-w-4xl mx-auto text-center">
+      <main className="flex-1 pt-28 pb-20">
+        {/* Hero Section */}
+        <section className="relative px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto pt-4 pb-10 text-center">
           <FadeIn>
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm font-medium mb-6">
-              <ImageIcon className="h-4 w-4" />
-              Free Image Gallery
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-violet-100 border border-violet-200/80 text-violet-700 text-xs font-bold mb-4">
+              <Sparkles className="h-3.5 w-3.5 text-violet-600" />
+              Royalty-Free Neural Asset Library • CC0 Commercial
             </span>
-          </FadeIn>
-
-          <FadeIn delay={0.1}>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
               Discover & Download{" "}
-              <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                Free AI Images
+              <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Free AI-Generated Assets
               </span>
             </h1>
-          </FadeIn>
-
-          <FadeIn delay={0.2}>
-            <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-10">
-              Search through AI-generated images using natural language prompts.
-              Browse, preview, and download high-quality images for free.
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed mb-8">
+              Explore high-resolution neural imagery generated by enterprise diffusion models.
+              Edit in studio, isolate backgrounds, or use freely across commercial projects.
             </p>
           </FadeIn>
 
-          {/* Search Bar - server form (GET) so params are in URL */}
-          <SlideIn delay={0.3}>
+          {/* Search Bar */}
+          <SlideIn direction="up" delay={0.15}>
             <form
-              method="get"
-              action="/free-images"
-              className="max-w-2xl mx-auto flex flex-col sm:flex-row gap-3"
+              onSubmit={handleSearchSubmit}
+              className="max-w-2xl mx-auto relative flex items-center mb-6"
             >
-              <div className="relative flex-1">
-                <Input
-                  name="q"
+              <div className="relative w-full">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <input
                   type="text"
-                  placeholder="Search images... (e.g., 'sunset over mountains')"
-                  defaultValue={query}
-                  icon={<Search className="h-4 w-4" />}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search by keywords, subject, artistic style, or lighting..."
+                  className="w-full pl-12 pr-28 py-3.5 rounded-2xl border border-slate-300 bg-white text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-600 shadow-sm transition-all"
                 />
-              </div>
-              <div className="flex gap-2">
-                <button
-                  type="submit"
-                  className="inline-flex items-center justify-center rounded-xl font-semibold px-5 py-2.5 text-sm bg-gradient-to-r from-violet-600 to-indigo-600 text-white"
-                >
-                  <Search className="mr-2 h-4 w-4" />
-                  Search
-                </button>
-                {isSearchActive && (
-                  <Link
-                    href="/free-images"
-                    className="inline-flex items-center justify-center rounded-xl font-semibold px-3 py-1.5 text-sm border-2 border-violet-500/50 text-violet-400 hover:bg-violet-500/10 transition-colors"
+                {searchTerm && (
+                  <button
+                    type="button"
+                    onClick={clearSearch}
+                    className="absolute right-24 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600"
+                    aria-label="Clear search"
                   >
                     <X className="h-4 w-4" />
-                  </Link>
+                  </button>
                 )}
+                <button
+                  type="submit"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 px-5 py-2 rounded-xl bg-violet-600 text-white font-semibold text-xs hover:bg-violet-700 shadow-xs transition-colors"
+                >
+                  Search
+                </button>
               </div>
             </form>
           </SlideIn>
-        </div>
-      </section>
 
-      {/* Results Section */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="max-w-7xl mx-auto">
-          {/* Results Header */}
-          {pagination && (
-            <FadeIn>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-8">
-                <p className="text-sm text-slate-400">
-                  {isSearchActive ? (
-                    <>
-                      Showing results for{" "}
-                      <span className="text-violet-400 font-medium">
-                        &quot;{query}&quot;
-                      </span>{" "}
-                      — {pagination.totalCount} image
-                      {pagination.totalCount !== 1 ? "s" : ""} found
-                    </>
-                  ) : (
-                    <>
-                      Browse all images — {pagination.totalCount} image
-                      {pagination.totalCount !== 1 ? "s" : ""} available
-                    </>
-                  )}
-                </p>
-                <p className="text-xs text-slate-500">
-                  Page {pagination.currentPage} of {pagination.totalPages}
-                </p>
-              </div>
-            </FadeIn>
-          )}
-
-          {/* Images Grid */}
-          {images.length > 0 && (
-            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-              {images.map((image) => {
-                const imageSlug = createPromptSlug(image.prompt, image._id);
-                const pageUrl = `/free-images/${imageSlug}`;
-
+          {/* Category Chips */}
+          <FadeIn delay={0.25}>
+            <div className="flex flex-wrap items-center justify-center gap-2 max-w-3xl mx-auto">
+              {CATEGORIES.map((cat) => {
+                const isActive =
+                  (cat === "All" && !query) ||
+                  query.toLowerCase() === cat.toLowerCase();
                 return (
-                  <StaggerItem key={image._id}>
-                    <div className="group relative rounded-2xl border border-slate-800 bg-slate-900/50 overflow-hidden backdrop-blur-sm hover:border-violet-500/40 transition-all duration-300 flex flex-col h-full">
-                      <div className="relative aspect-square w-full overflow-hidden bg-slate-800">
-                        <Link
-                          href={pageUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block w-full h-full"
-                        >
-                          <Image
-                            src={ensureCloudinaryHttps(image.cloudinaryUrl)}
-                            alt={image.prompt}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-                            <span className="text-xs text-violet-300 flex items-center gap-1 font-medium">
-                              <span>Open details</span>
-                              <ArrowRight className="h-3.5 w-3.5" />
-                            </span>
+                  <button
+                    key={cat}
+                    onClick={() => handleCategoryClick(cat)}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                      isActive
+                        ? "bg-violet-600 text-white shadow-xs"
+                        : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
+            </div>
+          </FadeIn>
+        </section>
+
+        {/* Gallery Grid */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+          {images.length === 0 ? (
+            <div className="rounded-3xl border border-slate-200 bg-white p-12 text-center max-w-lg mx-auto shadow-sm">
+              <div className="w-14 h-14 rounded-2xl bg-violet-50 border border-violet-100 flex items-center justify-center text-violet-600 mx-auto mb-4">
+                <ImageIcon className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">
+                No matching images found
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 mb-6">
+                We couldn&apos;t find any images matching &ldquo;{query}&rdquo;. Try another search term or browse our categories.
+              </p>
+              <button
+                onClick={clearSearch}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 text-white text-xs font-semibold hover:bg-violet-700 transition-colors"
+              >
+                <span>View All Images</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {images.map((item) => {
+                  const safeUrl = ensureCloudinaryHttps(item.cloudinaryUrl);
+                  const slug = createPromptSlug(item.prompt, item._id);
+                  const downloadUrl = safeUrl.includes("/upload/")
+                    ? safeUrl.replace("/upload/", "/upload/fl_attachment/")
+                    : safeUrl;
+
+                  return (
+                    <div
+                      key={item._id}
+                      className="group rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg hover:border-violet-300 transition-all duration-300 flex flex-col"
+                    >
+                      {/* Image container */}
+                      <div className="relative aspect-square w-full bg-slate-100 overflow-hidden">
+                        <Image
+                          src={safeUrl}
+                          alt={item.prompt}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+
+                        {/* Hover Quick Action Overlay */}
+                        <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-between p-4">
+                          <div className="flex justify-end gap-2">
+                            <Link
+                              href={`/image-editor?imageUrl=${encodeURIComponent(safeUrl)}`}
+                              title="Edit in Image Studio"
+                              className="w-8 h-8 rounded-lg bg-white/90 text-slate-800 hover:bg-white flex items-center justify-center transition-colors shadow-xs"
+                            >
+                              <Sliders className="h-4 w-4" />
+                            </Link>
+                            <Link
+                              href={`/image-editor?imageUrl=${encodeURIComponent(safeUrl)}&action=remove-bg`}
+                              title="Remove Background"
+                              className="w-8 h-8 rounded-lg bg-white/90 text-slate-800 hover:bg-white flex items-center justify-center transition-colors shadow-xs"
+                            >
+                              <Scissors className="h-4 w-4" />
+                            </Link>
                           </div>
-                        </Link>
+
+                          <div className="flex items-center justify-between gap-2">
+                            <a
+                              href={downloadUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 text-white text-xs font-semibold hover:bg-violet-700 transition-colors shadow-sm"
+                            >
+                              <Download className="h-3.5 w-3.5" />
+                              <span>Download</span>
+                            </a>
+                            <Link
+                              href={`/free-images/${slug}`}
+                              className="text-xs font-semibold text-white/90 hover:text-white underline underline-offset-4"
+                            >
+                              Details →
+                            </Link>
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between gap-2">
-                        <Link
-                          href={pageUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs text-slate-300 hover:text-violet-400 line-clamp-2 transition-colors font-medium"
-                          title={image.prompt}
-                        >
-                          {image.prompt}
+                      {/* Content block */}
+                      <div className="p-4 flex-1 flex flex-col justify-between gap-3">
+                        <Link href={`/free-images/${slug}`}>
+                          <p className="text-xs font-semibold text-slate-800 line-clamp-2 leading-relaxed hover:text-violet-600 transition-colors">
+                            {item.prompt}
+                          </p>
                         </Link>
-
-                        <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
-                          {image.vectorSearchScore != null && (
-                            <span className="inline-flex items-center gap-1 text-[11px] text-slate-500">
-                              <Sparkles className="h-3 w-3 text-violet-400" />
-                              {Math.round(image.vectorSearchScore * 100)}% match
-                            </span>
-                          )}
-                          <a
-                            href={
-                              image.cloudinaryUrl.includes("/upload/")
-                                ? ensureCloudinaryHttps(
-                                    image.cloudinaryUrl,
-                                  ).replace("/upload/", "/upload/fl_attachment/")
-                                : ensureCloudinaryHttps(image.cloudinaryUrl)
-                            }
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="ml-auto inline-flex items-center gap-1.5 text-xs text-violet-400 hover:text-violet-300 font-medium"
+                        <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-100">
+                          <span className="inline-flex items-center gap-1 text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                            <ShieldCheck className="h-3 w-3" />
+                            CC0 License
+                          </span>
+                          <Link
+                            href={`/free-images/${slug}`}
+                            className="text-violet-600 font-semibold hover:underline"
                           >
-                            <Download className="h-3.5 w-3.5" />
-                            <span>Download</span>
-                          </a>
+                            View Prompt
+                          </Link>
                         </div>
                       </div>
                     </div>
-                  </StaggerItem>
-                );
-              })}
-            </StaggerContainer>
-          )}
-
-          {/* Empty State */}
-          {images.length === 0 && (
-            <div className="text-center py-32">
-              <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-slate-800/50 mb-6">
-                <ImageIcon className="h-10 w-10 text-slate-600" />
+                  );
+                })}
               </div>
-              <h3 className="text-xl font-semibold text-slate-300 mb-2">
-                {isSearchActive ? "No images found" : "No images available"}
-              </h3>
-              <p className="text-slate-500 max-w-md mx-auto mb-6">
-                {isSearchActive
-                  ? "Try searching with a different prompt to find what you're looking for."
-                  : "There are no images available yet. Check back later!"}
-              </p>
-              {isSearchActive && (
-                <Link href="/free-images">
-                  <Button variant="outline">Clear Search</Button>
-                </Link>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="mt-14 flex items-center justify-center gap-3">
+                  <button
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage <= 1}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-xs"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    <span>Previous</span>
+                  </button>
+
+                  <div className="px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-700 shadow-xs">
+                    Page {currentPage} of {totalPages}
+                  </div>
+
+                  <button
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage >= totalPages}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-xs"
+                  >
+                    <span>Next</span>
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
               )}
-            </div>
+            </>
           )}
+        </section>
+      </main>
 
-          {/* Pagination */}
-          {pagination && pagination.totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 sm:gap-3 mt-12 flex-wrap">
-              <Link
-                href={`?q=${encodeURIComponent(query ?? "")}&page=${Math.max(1, (pagination.currentPage ?? 1) - 1)}`}
-              >
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={!pagination.hasPreviousPage}
-                >
-                  <ChevronLeft className="h-4 w-4 mr-1" />
-                  <span className="hidden sm:inline">Previous</span>
-                </Button>
-              </Link>
-
-              <div className="flex items-center gap-1.5">
-                {Array.from(
-                  { length: Math.min(5, pagination.totalPages) },
-                  (_, i) => {
-                    let pageNum: number;
-                    if (pagination.totalPages <= 5) {
-                      pageNum = i + 1;
-                    } else if ((pagination.currentPage ?? 1) <= 3) {
-                      pageNum = i + 1;
-                    } else if (
-                      (pagination.currentPage ?? 1) >=
-                      (pagination.totalPages ?? 1) - 2
-                    ) {
-                      pageNum = (pagination.totalPages ?? 1) - 4 + i;
-                    } else {
-                      pageNum = (pagination.currentPage ?? 1) - 2 + i;
-                    }
-                    return (
-                      <Link
-                        key={pageNum}
-                        href={`?q=${encodeURIComponent(query ?? "")}&page=${pageNum}`}
-                      >
-                        <Button
-                          variant={
-                            pageNum === (pagination.currentPage ?? 1)
-                              ? "primary"
-                              : "outline"
-                          }
-                          size="sm"
-                          className="min-w-[2.5rem]"
-                        >
-                          {pageNum}
-                        </Button>
-                      </Link>
-                    );
-                  },
-                )}
-              </div>
-
-              <Link
-                href={`?q=${encodeURIComponent(query ?? "")}&page=${Math.min(pagination.totalPages ?? 1, (pagination.currentPage ?? 1) + 1)}`}
-              >
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={!pagination.hasNextPage}
-                >
-                  <span className="hidden sm:inline">Next</span>
-                  <ChevronRight className="h-4 w-4 ml-1" />
-                </Button>
-              </Link>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 px-4">
-        <FadeIn>
-          <div className="max-w-3xl mx-auto text-center rounded-3xl border border-slate-800 bg-gradient-to-br from-violet-600/10 to-indigo-600/10 p-12">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Want to create your own images?
-            </h2>
-            <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-              Sign up for free and start generating AI images with your own
-              prompts and documents.
-            </p>
-            <Link href="/register">
-              <Button>
-                Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-        </FadeIn>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-800/50 py-8 px-4">
-        <div className="max-w-7xl mx-auto text-center text-sm text-slate-500">
-          © {new Date().getFullYear()} RagAI. All rights reserved.
-        </div>
-      </footer>
-    </main>
+      <Footer />
+    </div>
   );
 }
+

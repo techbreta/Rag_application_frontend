@@ -15,14 +15,12 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "",
-    template: "%s - Rag AI | RagAI",
+  title: "RagAI - Enterprise Multi-Document RAG & AI Studio Platform",
+  description:
+    "Enterprise-grade Retrieval-Augmented Generation (RAG) with exact citation verification, cross-document synthesis, OCR table extraction, and neural creative media suite.",
+  icons: {
+    icon: "/rag.png",
   },
-  authors: [{ name: "TechBreta Team", url: "https://ragai.website" }],
-  creator: "TechBreta | Talha Riaz",
-  publisher: "TechBreta | Talha Riaz",
-  category: "AI, RAG, Document Intelligence, Document Chat, Knowledge Graph, Vector Search, Semantic Search, Question Answering, AI Assistant, Document Understanding, Natural Language Processing, Machine Learning, Artificial Intelligence,Image Editor, Background Remover, Free Images, Document Converter",
 };
 
 export default function RootLayout({
@@ -31,12 +29,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="light">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-50 text-slate-900 selection:bg-violet-600 selection:text-white min-h-screen`}
       >
         <Providers>{children}</Providers>
       </body>
     </html>
   );
 }
+

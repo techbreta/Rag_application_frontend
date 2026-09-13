@@ -8,10 +8,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import { Mail, ArrowLeft } from "lucide-react";
+import Image from "next/image";
+import { Mail, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { GlowingOrb } from "@/components/layout/AnimatedPage";
 
 const forgotSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -37,7 +37,7 @@ export default function ForgotPasswordPage() {
     try {
       await forgotPassword(data.email);
       setSent(true);
-      toast.success("Reset email sent!");
+      toast.success("Reset link sent!");
     } catch (error: any) {
       toast.error(
         error.response?.data?.message || "Failed to send reset email",
@@ -48,70 +48,79 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-slate-950 px-4 overflow-hidden">
-      <GlowingOrb className="w-96 h-96 bg-violet-600 top-20 right-20" />
-
+    <div className="relative min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12 selection:bg-violet-600 selection:text-white">
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.4 }}
         className="relative w-full max-w-md"
       >
-        <div className="rounded-3xl border border-slate-800 bg-slate-900/80 backdrop-blur-xl p-8 shadow-2xl">
+        <div className="rounded-3xl border border-slate-200/90 bg-white p-8 sm:p-10 shadow-xl">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-white mb-2">
-              Forgot Password?
+            <Link href="/" className="inline-flex mb-4">
+              <Image
+                src="/rag.png"
+                alt="RagAI Logo"
+                width={160}
+                height={62}
+                priority
+                className="h-14 w-auto object-contain mx-auto"
+              />
+            </Link>
+            <h1 className="text-2xl font-bold text-slate-900 mb-1.5">
+              Reset Your Password
             </h1>
-            <p className="text-sm text-slate-400">
-              {sent
-                ? "Check your email for a reset link"
-                : "Enter your email and we'll send you a reset link"}
+            <p className="text-sm text-slate-500">
+              Enter your email and we&apos;ll send you a recovery link
             </p>
           </div>
 
-          {!sent ? (
+          {sent ? (
+            <div className="text-center space-y-4 py-4">
+              <div className="inline-flex p-3 rounded-full bg-emerald-50 text-emerald-600 mb-2">
+                <CheckCircle2 className="h-8 w-8" />
+              </div>
+              <h2 className="text-lg font-bold text-slate-900">Check your inbox</h2>
+              <p className="text-sm text-slate-600">
+                We have emailed password reset instructions to your address if an account exists.
+              </p>
+              <Link href="/login" className="inline-block mt-4 w-full">
+                <Button variant="outline" className="w-full">
+                  Return to Sign In
+                </Button>
+              </Link>
+            </div>
+          ) : (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               <Input
                 label="Email Address"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="you@company.com"
                 icon={<Mail className="h-4 w-4" />}
                 error={errors.email?.message}
                 {...register("email")}
               />
+
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full justify-center bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 rounded-xl shadow-sm hover:shadow-md"
                 size="lg"
                 isLoading={isLoading}
               >
-                Send Reset Link
+                Send Recovery Instructions
               </Button>
-            </form>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-8"
-            >
-              <div className="inline-flex rounded-full bg-emerald-500/10 p-4 mb-4">
-                <Mail className="h-8 w-8 text-emerald-400" />
-              </div>
-              <p className="text-sm text-slate-300">
-                We&apos;ve sent a password reset link to your email address.
-              </p>
-            </motion.div>
-          )}
 
-          <div className="mt-6 text-center">
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-2 text-sm text-violet-400 hover:text-violet-300 transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Sign In
-            </Link>
-          </div>
+              <div className="text-center pt-2">
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900 font-semibold transition-colors"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Sign In
+                </Link>
+              </div>
+            </form>
+          )}
         </div>
       </motion.div>
     </div>

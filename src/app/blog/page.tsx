@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import BlogSearchFilter from "./BlogSearchFilter";
 import { getPublishedBlogs, getBlogCategories } from "@/lib/blogApi";
 import { formatDate } from "@/lib/date";
@@ -131,7 +131,7 @@ export default async function BlogPage({
   const showFeaturedHero = page === 1 && !search && (!category || category === "All") && featuredBlog;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-violet-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col selection:bg-violet-600 selection:text-white">
       {/* Schema.org Structured Data */}
       <script
         type="application/ld+json"
@@ -140,54 +140,62 @@ export default async function BlogPage({
 
       <Navbar />
 
-      <main className="flex-1 pt-24 pb-20">
-        {/* Background glow effects */}
-        <div className="relative overflow-hidden">
-          <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-tr from-violet-600/20 via-indigo-600/15 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
+      <main className="flex-1 pt-28 pb-20">
+        {/* Hero Header */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 text-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-100 border border-violet-200/80 text-violet-700 text-xs font-semibold uppercase tracking-wider mb-6">
+            <Sparkles className="h-3.5 w-3.5" />
+            RagAI Technical Publications
+          </div>
 
-          {/* Hero Header */}
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 text-center">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-xs font-semibold uppercase tracking-wider mb-6">
-              <Sparkles className="h-3.5 w-3.5" />
-              RagAI Technical Publications
-            </div>
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight max-w-4xl mx-auto">
+            Insights on{" "}
+            <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Retrieval AI
+            </span>{" "}
+            & Neural Media
+          </h1>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight max-w-4xl mx-auto">
-              Insights on <span className="bg-gradient-to-r from-violet-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">Retrieval AI</span> & Neural Media
-            </h1>
+          <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Explore architectural breakdowns, hybrid vector search algorithms, optical document layout normalization, and production AI engineering.
+          </p>
 
-            <p className="mt-4 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Explore deep architectural write-ups, vector search algorithms, layout normalization benchmarks, and production AI engineering.
-            </p>
-
-            {/* Filter and Search Bar Wrapped in Suspense */}
-            <div className="mt-8">
-              <Suspense fallback={<div className="h-20 flex items-center justify-center text-slate-500 text-sm">Loading filters...</div>}>
-                <BlogSearchFilter
-                  categories={categories}
-                  currentCategory={category}
-                  currentSearch={search}
-                />
-              </Suspense>
-            </div>
-          </section>
-        </div>
+          {/* Filter and Search Bar Wrapped in Suspense */}
+          <div className="mt-8">
+            <Suspense
+              fallback={
+                <div className="h-20 flex items-center justify-center text-slate-400 text-sm">
+                  Loading filters...
+                </div>
+              }
+            >
+              <BlogSearchFilter
+                categories={categories}
+                currentCategory={category}
+                currentSearch={search}
+              />
+            </Suspense>
+          </div>
+        </section>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           {/* Featured Article Hero */}
           {showFeaturedHero && (
             <section className="relative group">
-              <div className="relative overflow-hidden rounded-3xl border border-violet-500/30 bg-gradient-to-b from-slate-900/90 to-slate-950/90 p-1 backdrop-blur-xl shadow-2xl transition-all duration-300 hover:border-violet-500/50">
+              <div className="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-2 shadow-xl transition-all duration-300 hover:border-violet-300 hover:shadow-2xl">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center p-6 sm:p-8">
                   {/* Featured Cover Image */}
-                  <div className="lg:col-span-7 relative h-64 sm:h-80 lg:h-96 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800">
+                  <div className="lg:col-span-7 relative h-64 sm:h-80 lg:h-96 w-full rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
                     <img
-                      src={featuredBlog.coverImage || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop"}
+                      src={
+                        featuredBlog.coverImage ||
+                        "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop"
+                      }
                       alt={featuredBlog.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-violet-600/90 text-white shadow-lg backdrop-blur-md border border-violet-400/30">
+                      <span className="px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-violet-600 text-white shadow-md">
                         Featured Article
                       </span>
                     </div>
@@ -195,8 +203,8 @@ export default async function BlogPage({
 
                   {/* Featured Content */}
                   <div className="lg:col-span-5 flex flex-col justify-center space-y-4">
-                    <div className="flex items-center gap-3 text-xs text-slate-400">
-                      <span className="text-violet-400 font-semibold uppercase tracking-wider">
+                    <div className="flex items-center gap-3 text-xs text-slate-500">
+                      <span className="text-violet-700 font-bold uppercase tracking-wider">
                         {featuredBlog.category}
                       </span>
                       <span>•</span>
@@ -207,24 +215,27 @@ export default async function BlogPage({
                     </div>
 
                     <Link href={`/blog/${featuredBlog.slug}`}>
-                      <h2 className="text-2xl sm:text-3xl font-bold text-white hover:text-violet-300 transition-colors leading-snug">
+                      <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 hover:text-violet-600 transition-colors leading-snug">
                         {featuredBlog.title}
                       </h2>
                     </Link>
 
-                    <p className="text-slate-400 text-sm sm:text-base line-clamp-3 leading-relaxed">
+                    <p className="text-slate-600 text-sm sm:text-base line-clamp-3 leading-relaxed">
                       {featuredBlog.excerpt}
                     </p>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-800/80">
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                       <div className="flex items-center gap-3">
                         <img
-                          src={featuredBlog.author?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"}
+                          src={
+                            featuredBlog.author?.avatar ||
+                            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"
+                          }
                           alt={featuredBlog.author?.name || "Author"}
-                          className="h-10 w-10 rounded-full border border-violet-500/30 object-cover"
+                          className="h-10 w-10 rounded-full border border-violet-200 object-cover"
                         />
                         <div>
-                          <div className="text-sm font-semibold text-white">
+                          <div className="text-sm font-semibold text-slate-900">
                             {featuredBlog.author?.name || "RagAI Engineering"}
                           </div>
                           <div className="text-xs text-slate-500">
@@ -235,7 +246,7 @@ export default async function BlogPage({
 
                       <Link
                         href={`/blog/${featuredBlog.slug}`}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs sm:text-sm font-semibold transition-all shadow-lg shadow-violet-600/25"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs sm:text-sm font-semibold transition-all shadow-md shadow-violet-600/20"
                       >
                         Read Article
                         <ArrowRight className="h-4 w-4" />
@@ -251,29 +262,29 @@ export default async function BlogPage({
           <section>
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                   {category && category !== "All"
                     ? `${category} Articles`
                     : search
                     ? `Results for "${search}"`
                     : "Latest Articles"}
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                <p className="text-xs sm:text-sm text-slate-500 mt-1">
                   Showing {blogs.length} of {pagination.totalCount} articles
                 </p>
               </div>
             </div>
 
             {blogs.length === 0 ? (
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/50 p-12 text-center max-w-lg mx-auto">
-                <BookOpen className="h-12 w-12 text-slate-600 mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-white">No articles found</h3>
-                <p className="text-slate-400 text-sm mt-2 mb-6">
+              <div className="rounded-3xl border border-slate-200 bg-white p-12 text-center max-w-lg mx-auto shadow-sm">
+                <BookOpen className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                <h3 className="text-lg font-bold text-slate-900">No articles found</h3>
+                <p className="text-slate-600 text-sm mt-2 mb-6">
                   We couldn&apos;t find any articles matching your search criteria. Try a different query or explore all categories.
                 </p>
                 <Link
                   href="/blog"
-                  className="px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium transition-all"
+                  className="px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium transition-all shadow-sm"
                 >
                   View All Articles
                 </Link>
@@ -283,17 +294,20 @@ export default async function BlogPage({
                 {blogs.map((blog) => (
                   <article
                     key={blog._id}
-                    className="group relative flex flex-col rounded-2xl border border-slate-800/80 bg-slate-900/60 hover:bg-slate-900/90 transition-all duration-300 hover:border-violet-500/40 hover:shadow-xl hover:shadow-violet-600/10 overflow-hidden"
+                    className="group relative flex flex-col rounded-2xl border border-slate-200/80 bg-white hover:border-violet-300 hover:shadow-xl transition-all duration-300 overflow-hidden"
                   >
                     {/* Cover Image Container */}
-                    <Link href={`/blog/${blog.slug}`} className="relative h-48 w-full overflow-hidden bg-slate-950">
+                    <Link href={`/blog/${blog.slug}`} className="relative h-48 w-full overflow-hidden bg-slate-100">
                       <img
-                        src={blog.coverImage || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop"}
+                        src={
+                          blog.coverImage ||
+                          "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop"
+                        }
                         alt={blog.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute top-3 left-3">
-                        <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-950/80 text-violet-300 border border-violet-500/30 backdrop-blur-md">
+                        <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-white/90 text-violet-700 border border-violet-200/80 shadow-xs backdrop-blur-md">
                           {blog.category}
                         </span>
                       </div>
@@ -302,34 +316,37 @@ export default async function BlogPage({
                     {/* Card Content Body */}
                     <div className="flex-1 p-5 sm:p-6 flex flex-col justify-between space-y-4">
                       <div className="space-y-2.5">
-                        <div className="flex items-center gap-2 text-xs text-slate-400">
-                          <Clock className="h-3.5 w-3.5 text-slate-500" />
+                        <div className="flex items-center gap-2 text-xs text-slate-500">
+                          <Clock className="h-3.5 w-3.5 text-slate-400" />
                           <span>{blog.readTimeMinutes} min read</span>
                           <span>•</span>
                           <span>{formatDate(blog.publishedAt || blog.createdAt)}</span>
                         </div>
 
                         <Link href={`/blog/${blog.slug}`}>
-                          <h3 className="text-lg font-bold text-white group-hover:text-violet-300 transition-colors line-clamp-2 leading-snug">
+                          <h3 className="text-lg font-bold text-slate-900 group-hover:text-violet-600 transition-colors line-clamp-2 leading-snug">
                             {blog.title}
                           </h3>
                         </Link>
 
-                        <p className="text-slate-400 text-xs sm:text-sm line-clamp-3 leading-relaxed">
+                        <p className="text-slate-600 text-xs sm:text-sm line-clamp-3 leading-relaxed">
                           {blog.excerpt}
                         </p>
                       </div>
 
                       {/* Author & Footer */}
-                      <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                      <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
                           <img
-                            src={blog.author?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"}
+                            src={
+                              blog.author?.avatar ||
+                              "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"
+                            }
                             alt={blog.author?.name || "Author"}
-                            className="h-8 w-8 rounded-full border border-slate-700 object-cover"
+                            className="h-8 w-8 rounded-full border border-slate-200 object-cover"
                           />
                           <div>
-                            <div className="text-xs font-semibold text-slate-200">
+                            <div className="text-xs font-semibold text-slate-800">
                               {blog.author?.name || "RagAI Team"}
                             </div>
                             <div className="text-[10px] text-slate-500">
@@ -340,7 +357,7 @@ export default async function BlogPage({
 
                         <Link
                           href={`/blog/${blog.slug}`}
-                          className="text-xs font-semibold text-violet-400 hover:text-violet-300 flex items-center gap-1 group-hover:translate-x-0.5 transition-all"
+                          className="text-xs font-semibold text-violet-600 hover:text-violet-700 flex items-center gap-1 group-hover:translate-x-0.5 transition-all"
                         >
                           Read
                           <ArrowRight className="h-3.5 w-3.5" />
@@ -362,14 +379,14 @@ export default async function BlogPage({
                       ...(search && { search }),
                       page: String(pagination.currentPage - 1),
                     }).toString()}`}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-slate-200 text-xs sm:text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors shadow-xs"
                   >
                     <ChevronLeft className="h-4 w-4" />
                     Previous
                   </Link>
                 )}
 
-                <span className="text-xs sm:text-sm text-slate-400 px-3">
+                <span className="text-xs sm:text-sm text-slate-500 px-3">
                   Page {pagination.currentPage} of {pagination.totalPages}
                 </span>
 
@@ -380,7 +397,7 @@ export default async function BlogPage({
                       ...(search && { search }),
                       page: String(pagination.currentPage + 1),
                     }).toString()}`}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-slate-200 text-xs sm:text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors shadow-xs"
                   >
                     Next
                     <ChevronRight className="h-4 w-4" />
@@ -391,24 +408,24 @@ export default async function BlogPage({
           </section>
 
           {/* CTA Banner */}
-          <section className="relative overflow-hidden rounded-3xl border border-violet-500/30 bg-gradient-to-r from-violet-950/60 via-slate-900 to-indigo-950/60 p-8 sm:p-12 text-center backdrop-blur-xl">
+          <section className="relative overflow-hidden rounded-3xl border border-violet-100 bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-700 p-8 sm:p-12 text-center shadow-xl text-white">
             <div className="max-w-2xl mx-auto space-y-4">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
                 Supercharge Your Knowledge Retrieval & Creative Workflows
               </h2>
-              <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+              <p className="text-sm sm:text-base text-violet-100 leading-relaxed">
                 Connect your documents, run multi-hop citation-grounded RAG queries, remove backgrounds with neural matting, and synthesize studio images in one unified workspace.
               </p>
               <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
                   href="/register"
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-semibold text-sm transition-all shadow-lg shadow-violet-600/25"
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white text-violet-900 hover:bg-slate-100 font-bold text-sm transition-all shadow-md"
                 >
                   Get Started Free
                 </Link>
                 <Link
                   href="/features"
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-sm border border-slate-700 transition-all"
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-violet-700/60 hover:bg-violet-700 text-white font-semibold text-sm border border-white/30 transition-all"
                 >
                   Explore Platform Features
                 </Link>
@@ -418,21 +435,7 @@ export default async function BlogPage({
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-slate-500">
-          <div className="flex items-center gap-3">
-            <Image src="/rag.png" alt="RagAI" width={80} height={32} className="h-8 w-auto" />
-            <span>© {new Date().getFullYear()} RagAI Inc. All rights reserved.</span>
-          </div>
-          <div className="flex items-center gap-6 text-slate-400">
-            <Link href="/features" className="hover:text-white transition-colors">Features</Link>
-            <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
-            <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
-            <Link href="/free-images" className="hover:text-white transition-colors">Free Images</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

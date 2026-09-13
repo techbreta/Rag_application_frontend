@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Navbar from "@/components/layout/Navbar";
@@ -14,31 +15,29 @@ const FilerobotImageEditor = dynamic(
   { ssr: false },
 );
 
-// We also need TABS — import them separately so they resolve at runtime
-let TABS_PROMISE: Promise<any> | null = null;
-function getTabsPromise() {
-  if (!TABS_PROMISE) {
-    TABS_PROMISE = import("react-filerobot-image-editor").then(
-      (mod) => mod.TABS,
-    );
-  }
-  return TABS_PROMISE;
-}
+// Static tabs constants to avoid unnecessary runtime bundle evaluation
+const TABS = {
+  FINETUNE: "Finetune",
+  FILTERS: "Filters",
+  ADJUST: "Adjust",
+  WATERMARK: "Watermark",
+  ANNOTATE: "Annotate",
+  RESIZE: "Resize",
+};
+
+const DEFAULT_IMAGE =
+  "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=800&auto=format&fit=crop";
 
 export default function ImageEditorPage() {
-  const [imageSrc, setImageSrc] = useState<string>(
-    "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=800&auto=format&fit=crop",
-  );
+  const searchParams = useSearchParams();
+
+  const [imageSrc, setImageSrc] = useState<string>(DEFAULT_IMAGE);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [processedImage, setProcessedImage] = useState<string | null>(null);
   const [isRemovingBg, setIsRemovingBg] = useState(false);
   const [showEditor, setShowEditor] = useState(true);
-  const [tabs, setTabs] = useState<any>(null);
-
-  // Resolve TABS on mount
-  useEffect(() => {
-    getTabsPromise().then(setTabs);
-  }, []);
+  const [tabs] = useState<any>(TABS);
+  const [pendingRemoveBg, setPendingRemoveBg] = useState(false);
 
   /* ── file picker ── */
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +52,26 @@ export default function ImageEditorPage() {
       setTimeout(() => setShowEditor(true), 50);
     }
   };
+
+  /* ── Read imageUrl & action from query params on mount ── */
+  useEffect(() => {
+    const imageUrl = searchParams?.get("imageUrl");
+    const action = searchParams?.get("action");
+
+    if (imageUrl) {
+      const safeUrl = ensureCloudinaryHttps(imageUrl);
+      setImageSrc(safeUrl);
+      setProcessedImage(null);
+      // Remount editor with new source
+      setShowEditor(false);
+      setTimeout(() => setShowEditor(true), 100);
+
+      // If action is remove-bg, trigger it after the image loads
+      if (action === "remove-bg") {
+        setPendingRemoveBg(true);
+      }
+    }
+  }, [searchParams]);
 
   /* ── on save from editor ── */
   const handleSave = (editedImageObject: any) => {
@@ -88,7 +107,7 @@ export default function ImageEditorPage() {
   };
 
   /* ── remove background ── */
-  const removeBackground = async () => {
+  const removeBackground = useCallback(async () => {
     if (!imageSrc) {
       toast.error("Please upload an image first");
       return;
@@ -157,7 +176,16 @@ export default function ImageEditorPage() {
     } finally {
       setIsRemovingBg(false);
     }
-  };
+  }, [imageSrc, selectedFile]);
+
+  /* ── auto-trigger remove-bg if requested via query param ── */
+  useEffect(() => {
+    if (pendingRemoveBg && imageSrc && imageSrc !== DEFAULT_IMAGE && !isRemovingBg) {
+      setPendingRemoveBg(false);
+      // Small delay to let the editor mount first
+      setTimeout(() => removeBackground(), 500);
+    }
+  }, [pendingRemoveBg, imageSrc, isRemovingBg, removeBackground]);
 
   return (
     <div className="min-h-screen">

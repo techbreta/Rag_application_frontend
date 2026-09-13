@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ensureCloudinaryHttps } from "@/lib/cloudinary";
+import { createPromptSlug } from "@/lib/slug";
 import Navbar from "@/components/layout/Navbar";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -124,15 +127,11 @@ export default function FreeImagesClient({
                   Search
                 </button>
                 {isSearchActive && (
-                  <Link href="/free-images">
-                    <a>
-                      <button
-                        type="button"
-                        className="inline-flex items-center justify-center rounded-xl font-semibold px-3 py-1.5 text-sm border-2 border-violet-500/50 text-violet-400"
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    </a>
+                  <Link
+                    href="/free-images"
+                    className="inline-flex items-center justify-center rounded-xl font-semibold px-3 py-1.5 text-sm border-2 border-violet-500/50 text-violet-400 hover:bg-violet-500/10 transition-colors"
+                  >
+                    <X className="h-4 w-4" />
                   </Link>
                 )}
               </div>
@@ -174,54 +173,76 @@ export default function FreeImagesClient({
 
           {/* Images Grid */}
           {images.length > 0 && (
-            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-              {images.map((image) => (
-                <StaggerItem key={image._id}>
-                  <div className="group relative rounded-2xl border border-slate-800 bg-slate-900/50 overflow-hidden backdrop-blur-sm hover:border-violet-500/30 transition-all duration-300">
-                    <div className="relative aspect-square w-full overflow-hidden bg-slate-800">
-                      <a
-                        href={ensureCloudinaryHttps(image.cloudinaryUrl)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Image
-                          src={ensureCloudinaryHttps(image.cloudinaryUrl)}
-                          alt={image.prompt}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                        />
-                      </a>
-                    </div>
+            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+              {images.map((image) => {
+                const imageSlug = createPromptSlug(image.prompt, image._id);
+                const pageUrl = `/free-images/${imageSlug}`;
 
-                    <div className="p-3 sm:p-4">
-                      <div className="flex items-center justify-between gap-2">
-                        {image.vectorSearchScore != null && (
-                          <span className="inline-flex items-center gap-1 text-xs text-slate-500">
-                            <Sparkles className="h-3 w-3 text-violet-400" />
-                            {Math.round(image.vectorSearchScore * 100)}% match
-                          </span>
-                        )}
-                        <a
-                          href={
-                            image.cloudinaryUrl.includes("/upload/")
-                              ? ensureCloudinaryHttps(
-                                  image.cloudinaryUrl,
-                                ).replace("/upload/", "/upload/fl_attachment/")
-                              : ensureCloudinaryHttps(image.cloudinaryUrl)
-                          }
+                return (
+                  <StaggerItem key={image._id}>
+                    <div className="group relative rounded-2xl border border-slate-800 bg-slate-900/50 overflow-hidden backdrop-blur-sm hover:border-violet-500/40 transition-all duration-300 flex flex-col h-full">
+                      <div className="relative aspect-square w-full overflow-hidden bg-slate-800">
+                        <Link
+                          href={pageUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="ml-auto inline-flex items-center gap-2 text-violet-400"
+                          className="block w-full h-full"
                         >
-                          <Download className="h-4 w-4" />
-                          <span className="text-xs">Download</span>
-                        </a>
+                          <Image
+                            src={ensureCloudinaryHttps(image.cloudinaryUrl)}
+                            alt={image.prompt}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                            <span className="text-xs text-violet-300 flex items-center gap-1 font-medium">
+                              <span>Open details</span>
+                              <ArrowRight className="h-3.5 w-3.5" />
+                            </span>
+                          </div>
+                        </Link>
+                      </div>
+
+                      <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between gap-2">
+                        <Link
+                          href={pageUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-slate-300 hover:text-violet-400 line-clamp-2 transition-colors font-medium"
+                          title={image.prompt}
+                        >
+                          {image.prompt}
+                        </Link>
+
+                        <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                          {image.vectorSearchScore != null && (
+                            <span className="inline-flex items-center gap-1 text-[11px] text-slate-500">
+                              <Sparkles className="h-3 w-3 text-violet-400" />
+                              {Math.round(image.vectorSearchScore * 100)}% match
+                            </span>
+                          )}
+                          <a
+                            href={
+                              image.cloudinaryUrl.includes("/upload/")
+                                ? ensureCloudinaryHttps(
+                                    image.cloudinaryUrl,
+                                  ).replace("/upload/", "/upload/fl_attachment/")
+                                : ensureCloudinaryHttps(image.cloudinaryUrl)
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-auto inline-flex items-center gap-1.5 text-xs text-violet-400 hover:text-violet-300 font-medium"
+                          >
+                            <Download className="h-3.5 w-3.5" />
+                            <span>Download</span>
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </StaggerItem>
-              ))}
+                  </StaggerItem>
+                );
+              })}
             </StaggerContainer>
           )}
 

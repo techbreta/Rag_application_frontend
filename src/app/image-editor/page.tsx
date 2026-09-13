@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
@@ -28,7 +28,7 @@ const TABS = {
 const DEFAULT_IMAGE =
   "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=800&auto=format&fit=crop";
 
-export default function ImageEditorPage() {
+function ImageEditorContent() {
   const searchParams = useSearchParams();
 
   const [imageSrc, setImageSrc] = useState<string>(DEFAULT_IMAGE);
@@ -329,5 +329,19 @@ export default function ImageEditorPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function ImageEditorPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-violet-500" />
+        </div>
+      }
+    >
+      <ImageEditorContent />
+    </Suspense>
   );
 }

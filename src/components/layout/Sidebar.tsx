@@ -17,6 +17,10 @@ import {
   X,
   Sparkles,
   ImageIcon,
+  ShieldCheck,
+  Users,
+  Files,
+  MessagesSquare,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
@@ -32,6 +36,13 @@ const navItems = [
     icon: Sparkles,
   },
   { href: "/dashboard/images", label: "Image Gallery", icon: ImageIcon },
+];
+
+const adminNavItems = [
+  { href: "/dashboard/admin", label: "Admin Overview", icon: ShieldCheck },
+  { href: "/dashboard/admin/users", label: "All Users", icon: Users },
+  { href: "/dashboard/admin/documents", label: "All Documents", icon: Files },
+  { href: "/dashboard/admin/chats", label: "All Chats", icon: MessagesSquare },
 ];
 
 export default function Sidebar() {
@@ -184,6 +195,62 @@ export default function Sidebar() {
               </Link>
             );
           })}
+
+          {(user?.role === "superadmin" || user?.role === "admin") && (
+            <div className="pt-4 mt-4 border-t border-slate-800/80">
+              {!collapsed && (
+                <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                  Super Admin
+                </p>
+              )}
+              {adminNavItems.map((item) => {
+                const currentPath = pathname ?? "";
+                const isActive =
+                  item.href === "/dashboard/admin"
+                    ? currentPath === "/dashboard/admin"
+                    : currentPath.startsWith(item.href);
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 group",
+                      isActive
+                        ? "text-white"
+                        : "text-slate-400 hover:text-white hover:bg-slate-800/50",
+                    )}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeAdminNav"
+                        className="absolute inset-0 rounded-xl bg-gradient-to-r from-violet-600/25 to-pink-600/25 border border-violet-500/40"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                    <item.icon
+                      className={cn(
+                        "h-5 w-5 shrink-0 relative z-10",
+                        isActive ? "text-violet-400" : "text-slate-400 group-hover:text-violet-300",
+                      )}
+                    />
+                    <AnimatePresence>
+                      {!collapsed && (
+                        <motion.span
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="relative z-10 overflow-hidden whitespace-nowrap"
+                        >
+                          {item.label}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </nav>
 
         {/* User & Logout */}

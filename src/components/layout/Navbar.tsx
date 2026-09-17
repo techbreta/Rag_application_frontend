@@ -22,7 +22,10 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-18 sm:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 transition-transform hover:scale-[1.02]">
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 transition-transform hover:scale-[1.02]"
+          >
             <Image
               src="/rag.png"
               alt="RagAI Logo"
@@ -79,6 +82,12 @@ export default function Navbar() {
               <span className="px-1.5 py-0.2 text-[10px] font-bold rounded-full bg-violet-100 text-violet-700">
                 New
               </span>
+            </Link>
+            <Link
+              href="/contact"
+              className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+            >
+              Contact
             </Link>
 
             {isAuthenticated ? (
@@ -176,6 +185,13 @@ export default function Navbar() {
             >
               Blog
             </Link>
+            <Link
+              href="/contact"
+              className="block text-sm font-medium text-slate-700 hover:text-violet-600 hover:bg-slate-50 px-3 py-2 rounded-lg"
+              onClick={() => setMobileOpen(false)}
+            >
+              Contact
+            </Link>
 
             {isAuthenticated ? (
               <Link href="/dashboard" onClick={() => setMobileOpen(false)}>
@@ -206,3 +222,4 @@ export default function Navbar() {
     </motion.nav>
   );
 }
+

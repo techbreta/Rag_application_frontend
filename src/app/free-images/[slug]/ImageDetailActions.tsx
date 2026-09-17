@@ -75,7 +75,7 @@ export default function ImageDetailActions({
     const pageUrl =
       typeof window !== "undefined"
         ? window.location.href
-        : `https://ragai.techbreta.com/free-images/${slug}`;
+        : `https://www.ragai.website/free-images/${slug}`;
 
     // Try Web Share API (mobile / supported browsers)
     if (navigator.share) {

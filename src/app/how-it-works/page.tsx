@@ -4,20 +4,14 @@ import Footer from "@/components/layout/Footer";
 import Button from "@/components/ui/Button";
 import {
   FadeIn,
-  SlideIn,
-  StaggerContainer,
-  StaggerItem,
 } from "@/components/layout/AnimatedPage";
 import {
   Upload,
   Cpu,
   Search,
-  MessageSquare,
   ArrowRight,
   Database,
   Sparkles,
-  Shield,
-  Layers,
   CheckCircle2,
   Lock,
 } from "lucide-react";
@@ -116,7 +110,7 @@ export default function HowItWorksPage() {
 
         {/* 4-Stage Pipeline Walkthrough */}
         <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 pb-20">
-          {stages.map((stage, idx) => (
+          {stages.map((stage) => (
             <div
               key={stage.step}
               className="bg-white rounded-3xl border border-slate-200/90 p-8 sm:p-10 shadow-sm hover:shadow-md transition-all flex flex-col lg:flex-row gap-8 items-start"
@@ -184,18 +178,18 @@ export default function HowItWorksPage() {
                 Upload your first PDFs, legal contracts, or financial reports and experience citation-grounded RAG in under 60 seconds.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-                <Link href="/register" className="w-full sm:w-auto">
-                  <Button className="w-full justify-center bg-white text-violet-900 hover:bg-slate-100 font-bold px-8 py-3.5 rounded-xl shadow-lg text-sm">
-                    Start Free Trial <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                <Link
+                  href="/register"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold text-sm bg-white text-slate-900 hover:bg-slate-100 hover:text-slate-950 shadow-xl shadow-black/20 hover:scale-[1.02] active:scale-[0.99] transition-all"
+                >
+                  <span>Start Free Trial</span>
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link href="/features" className="w-full sm:w-auto">
-                  <Button
-                    variant="outline"
-                    className="w-full justify-center border-white/40 text-white hover:bg-white/10 font-semibold px-6 py-3.5 rounded-xl text-sm"
-                  >
-                    View Platform Specs
-                  </Button>
+                <Link
+                  href="/features"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm border border-white/40 bg-white/10 text-white hover:bg-white/20 hover:border-white/60 backdrop-blur-md shadow-xs hover:scale-[1.02] active:scale-[0.99] transition-all"
+                >
+                  <span>View Platform Specs</span>
                 </Link>
               </div>
             </div>
@@ -207,3 +201,4 @@ export default function HowItWorksPage() {
     </div>
   );
 }
+

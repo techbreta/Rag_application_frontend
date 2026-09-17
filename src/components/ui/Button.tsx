@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { forwardRef, ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
@@ -6,7 +6,14 @@ import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "outline"
+    | "ghost"
+    | "danger"
+    | "white"
+    | "outline-white";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
 }
@@ -34,12 +41,16 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ghost: "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
       danger:
         "bg-red-600 text-white hover:bg-red-700 shadow-md shadow-red-500/20",
+      white:
+        "bg-white text-slate-900 font-bold hover:bg-slate-100 hover:text-slate-950 shadow-xl shadow-black/10 border border-transparent",
+      "outline-white":
+        "border border-white/40 bg-white/10 text-white hover:bg-white/20 hover:border-white/60 backdrop-blur-md font-semibold shadow-xs",
     };
 
     const sizes = {
       sm: "px-3 py-1.5 text-xs font-semibold",
       md: "px-5 py-2.5 text-sm font-semibold",
-      lg: "px-8 py-3 text-base font-semibold",
+      lg: "px-8 py-3.5 text-base font-semibold",
     };
 
     return (
@@ -65,3 +76,4 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = "Button";
 export default Button;
+

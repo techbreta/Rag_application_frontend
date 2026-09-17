@@ -39,7 +39,7 @@ export async function generateMetadata({
   }
 
   const { blog } = data;
-  const siteUrl = process.env["NEXT_PUBLIC_APP_URL"] || "https://ragai.techbreta.com";
+  const siteUrl = process.env["NEXT_PUBLIC_APP_URL"] || "https://www.ragai.website";
   const postUrl = `${siteUrl}/blog/${blog.slug}`;
   const title = blog.seoTitle || `${blog.title} | RagAI Blog`;
   const description = blog.seoDescription || blog.excerpt;
@@ -91,7 +91,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const { blog, relatedBlogs } = data;
-  const siteUrl = process.env["NEXT_PUBLIC_APP_URL"] || "https://ragai.techbreta.com";
+  const siteUrl = process.env["NEXT_PUBLIC_APP_URL"] || "https://www.ragai.website";
   const postUrl = `${siteUrl}/blog/${blog.slug}`;
   const coverImage =
     blog.coverImage ||
@@ -458,3 +458,4 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     </div>
   );
 }
+

@@ -27,7 +27,7 @@ export async function generateMetadata({
   const description =
     "Explore in-depth technical guides, tutorials, and research on Retrieval-Augmented Generation (RAG), vector databases, multi-document synthesis, neural computer vision, and building secure AI infrastructure.";
 
-  const siteUrl = process.env["NEXT_PUBLIC_APP_URL"] || "https://ragai.techbreta.com";
+  const siteUrl = process.env["NEXT_PUBLIC_APP_URL"] || "https://www.ragai.website";
   const canonicalUrl = `${siteUrl}/blog`;
 
   return {
@@ -71,7 +71,7 @@ export async function generateMetadata({
       images: [
         "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
       ],
-      creator: "@ragai",
+      creator: "@ragai_ai",
     },
   };
 }
@@ -97,6 +97,7 @@ export default async function BlogPage({
   ]);
 
   const { blogs, featuredBlog, pagination } = blogData;
+  const siteUrl = process.env["NEXT_PUBLIC_APP_URL"] || "https://www.ragai.website";
 
   // Schema.org Blog / CollectionPage JSON-LD
   const jsonLd = {
@@ -105,20 +106,20 @@ export default async function BlogPage({
     name: "RagAI Engineering & AI Research Blog",
     description:
       "Articles and deep dives on Retrieval-Augmented Generation, vector embeddings, multi-document synthesis, and AI computer vision.",
-    url: `${process.env["NEXT_PUBLIC_APP_URL"] || "https://ragai.techbreta.com"}/blog`,
+    url: `${siteUrl}/blog`,
     publisher: {
       "@type": "Organization",
       name: "RagAI",
       logo: {
         "@type": "ImageObject",
-        url: `${process.env["NEXT_PUBLIC_APP_URL"] || "https://ragai.techbreta.com"}/rag.png`,
+        url: `${siteUrl}/rag.png`,
       },
     },
     blogPost: blogs.map((blog) => ({
       "@type": "BlogPosting",
       headline: blog.title,
       description: blog.excerpt,
-      url: `${process.env["NEXT_PUBLIC_APP_URL"] || "https://ragai.techbreta.com"}/blog/${blog.slug}`,
+      url: `${siteUrl}/blog/${blog.slug}`,
       datePublished: blog.publishedAt || blog.createdAt,
       image: blog.coverImage,
       author: {
@@ -439,3 +440,4 @@ export default async function BlogPage({
     </div>
   );
 }
+

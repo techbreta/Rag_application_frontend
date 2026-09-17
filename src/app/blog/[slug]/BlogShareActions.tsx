@@ -16,7 +16,7 @@ export default function BlogShareActions({ title, slug }: BlogShareActionsProps)
     if (typeof window !== "undefined") {
       return `${window.location.origin}/blog/${slug}`;
     }
-    return `https://ragai.techbreta.com/blog/${slug}`;
+    return `https://www.ragai.website/blog/${slug}`;
   };
 
   const handleCopy = async () => {
@@ -93,3 +93,4 @@ export default function BlogShareActions({ title, slug }: BlogShareActionsProps)
     </div>
   );
 }
+

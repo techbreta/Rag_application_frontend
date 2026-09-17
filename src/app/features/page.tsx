@@ -4,9 +4,6 @@ import Footer from "@/components/layout/Footer";
 import Button from "@/components/ui/Button";
 import {
   FadeIn,
-  SlideIn,
-  StaggerContainer,
-  StaggerItem,
 } from "@/components/layout/AnimatedPage";
 import {
   Search,
@@ -14,14 +11,7 @@ import {
   FileText,
   Shield,
   ArrowRight,
-  Database,
   Cpu,
-  Layers,
-  Scissors,
-  Check,
-  Building2,
-  FileCode,
-  Lock,
 } from "lucide-react";
 
 export const metadata = {
@@ -174,7 +164,7 @@ export default function FeaturesPage() {
 
         {/* Feature Pillars Grid */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 pb-20">
-          {capabilities.map((cat, idx) => (
+          {capabilities.map((cat) => (
             <div key={cat.category} className="space-y-6">
               <div className="flex items-center gap-3 border-b border-slate-200 pb-4">
                 <div className={`p-2.5 rounded-xl bg-gradient-to-br ${cat.color} text-white shadow-sm`}>
@@ -218,7 +208,7 @@ export default function FeaturesPage() {
               </p>
             </div>
             <div className="shrink-0 flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-              <Link href="/register" className="w-full sm:w-auto">
+              <Link href="/contact?type=security" className="w-full sm:w-auto">
                 <Button className="w-full justify-center bg-violet-600 hover:bg-violet-700 text-white shadow-lg shadow-violet-600/30 font-semibold px-6 py-3 rounded-xl text-sm">
                   Talk to Security Team
                 </Button>
@@ -238,18 +228,18 @@ export default function FeaturesPage() {
                 No credit card required. Upload your first documents and experience hallucination-free AI answers in under 60 seconds.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-                <Link href="/register" className="w-full sm:w-auto">
-                  <Button className="w-full justify-center bg-white text-violet-900 hover:bg-slate-100 font-bold px-8 py-3.5 rounded-xl shadow-lg text-sm">
-                    Start Free Trial <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                <Link
+                  href="/register"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold text-sm bg-white text-slate-900 hover:bg-slate-100 hover:text-slate-950 shadow-xl shadow-black/20 hover:scale-[1.02] active:scale-[0.99] transition-all"
+                >
+                  <span>Start Free Trial</span>
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link href="/pricing" className="w-full sm:w-auto">
-                  <Button
-                    variant="outline"
-                    className="w-full justify-center border-white/40 text-white hover:bg-white/10 font-semibold px-6 py-3.5 rounded-xl text-sm"
-                  >
-                    View Pricing Plans
-                  </Button>
+                <Link
+                  href="/pricing"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm border border-white/40 bg-white/10 text-white hover:bg-white/20 hover:border-white/60 backdrop-blur-md shadow-xs hover:scale-[1.02] active:scale-[0.99] transition-all"
+                >
+                  <span>View Pricing Plans</span>
                 </Link>
               </div>
             </div>
@@ -261,3 +251,4 @@ export default function FeaturesPage() {
     </div>
   );
 }
+

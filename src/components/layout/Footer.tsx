@@ -7,7 +7,6 @@ import {
   ShieldCheck,
   Lock,
   FileText,
-  Sparkles,
   ArrowRight,
   CheckCircle2,
   ExternalLink,
@@ -252,6 +251,16 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/contact" className="hover:text-violet-600 transition-colors font-medium text-violet-600">
+                  Contact & Support
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact?type=sales" className="hover:text-violet-600 transition-colors">
+                  Contact Sales
+                </Link>
+              </li>
+              <li>
                 <Link href="/login" className="hover:text-violet-600 transition-colors">
                   Customer Portal
                 </Link>
@@ -259,11 +268,6 @@ export default function Footer() {
               <li>
                 <Link href="/register" className="hover:text-violet-600 transition-colors">
                   Start Free Trial
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing" className="hover:text-violet-600 transition-colors">
-                  Contact Sales
                 </Link>
               </li>
               <li>

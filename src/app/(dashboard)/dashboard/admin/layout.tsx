@@ -4,7 +4,17 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Link from "next/link";
-import { ShieldAlert, ShieldCheck, Users, Files, MessagesSquare, LayoutDashboard, ImageIcon, BookOpen } from "lucide-react";
+import {
+  ShieldAlert,
+  ShieldCheck,
+  Users,
+  Files,
+  MessagesSquare,
+  LayoutDashboard,
+  ImageIcon,
+  BookOpen,
+  Mail,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
@@ -14,6 +24,7 @@ const tabs = [
   { href: "/dashboard/admin/chats", label: "All Chats", icon: MessagesSquare },
   { href: "/dashboard/admin/images", label: "All Images", icon: ImageIcon },
   { href: "/dashboard/admin/blogs", label: "All Blogs", icon: BookOpen },
+  { href: "/dashboard/admin/contacts", label: "Inquiries", icon: Mail },
 ];
 
 export default function AdminLayout({
@@ -80,7 +91,7 @@ export default function AdminLayout({
                 </span>
               </div>
               <p className="text-sm text-slate-400 mt-1">
-                Monitor all platform users, uploaded documents, and AI chat transcripts
+                Monitor all platform users, uploaded documents, AI chat transcripts, and enterprise inquiries
               </p>
             </div>
           </div>

@@ -3,9 +3,9 @@ import { createPromptSlug } from "@/lib/slug";
 
 const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL || "https://www.ragai.website").replace(/\/+$/, "");
 const API_URL = (
-  process.env.INTERNAL_API_URL ||
+  (process.env.VERCEL ? process.env.NEXT_PUBLIC_API_URL : process.env.INTERNAL_API_URL) ||
   process.env.NEXT_PUBLIC_API_URL ||
-  "http://127.0.0.1:4000"
+  "https://rag-application-backend-xi.vercel.app"
 ).replace(/\/+$/, "");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

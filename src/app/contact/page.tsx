@@ -20,7 +20,6 @@ import {
   Phone,
   HelpCircle,
   Clock,
-  ArrowRight,
   Headphones,
   Check,
 } from "lucide-react";
@@ -442,7 +441,7 @@ function ContactContent() {
                         className="mt-0.5 h-4 w-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500/30"
                       />
                       <span className="text-xs text-slate-500 leading-relaxed">
-                        I confirm this inquiry is for commercial or technical evaluation. I agree to RagAI's{" "}
+                        I confirm this inquiry is for commercial or technical evaluation. I agree to RagAI&apos;s{" "}
                         <Link href="/privacy" className="text-violet-600 hover:underline">
                           Privacy Policy
                         </Link>{" "}

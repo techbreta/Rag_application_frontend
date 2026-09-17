@@ -27,6 +27,22 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    const backendUrl = (
+      process.env.NEXT_PUBLIC_API_URL || "https://rag-application-backend-xi.vercel.app"
+    ).replace(/\/+$/, "");
+
+    return [
+      {
+        source: "/sitemap.xml",
+        destination: `${backendUrl}/sitemap.xml`,
+      },
+      {
+        source: "/robots.txt",
+        destination: `${backendUrl}/robots.txt`,
+      },
+    ];
+  },
   webpack: (config, { isServer }) => {
     // konva/canvas is only needed client-side; stub it out during SSR builds
     if (isServer) {

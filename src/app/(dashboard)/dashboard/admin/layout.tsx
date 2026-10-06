@@ -14,6 +14,7 @@ import {
   ImageIcon,
   BookOpen,
   Mail,
+  SearchCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,7 @@ const tabs = [
   { href: "/dashboard/admin/images", label: "All Images", icon: ImageIcon },
   { href: "/dashboard/admin/blogs", label: "All Blogs", icon: BookOpen },
   { href: "/dashboard/admin/contacts", label: "Inquiries", icon: Mail },
+  { href: "/dashboard/admin/indexing", label: "Google Indexing", icon: SearchCheck },
 ];
 
 export default function AdminLayout({

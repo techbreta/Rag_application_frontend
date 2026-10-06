@@ -23,6 +23,7 @@ import {
   MessagesSquare,
   BookOpen,
   Mail,
+  SearchCheck,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
@@ -48,6 +49,7 @@ const adminNavItems = [
   { href: "/dashboard/admin/images", label: "All Images", icon: ImageIcon },
   { href: "/dashboard/admin/blogs", label: "Manage Blogs", icon: BookOpen },
   { href: "/dashboard/admin/contacts", label: "Inquiries & Leads", icon: Mail },
+  { href: "/dashboard/admin/indexing", label: "Google Indexing", icon: SearchCheck },
 ];
 
 export default function Sidebar() {
